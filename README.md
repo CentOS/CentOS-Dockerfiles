@@ -7,7 +7,7 @@ This repository provides Dockerfiles for use with CentOS. Popular implementation
 
 Each Dockerfile should contain a README that includes the following:
 
- * Version of Docker that it was built/tested against
+ * Version of CentOS and Docker that it was built/tested against
  * Instructions for building the Docker image
 
 --
