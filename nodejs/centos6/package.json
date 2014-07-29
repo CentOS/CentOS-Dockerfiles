@@ -1,0 +1,10 @@
+{
+  "name": "docker-centos-hello",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Node.js Hello World app on CentOS6 using docker, created from the Node.js example on docker.io",
+  "author": "Adam Miller <maxamillion@fedoraproject.org>",
+  "dependencies": {
+    "express": "3.x"
+  }
+}
