@@ -1,0 +1,312 @@
+#!/bin/bash
+#
+# named           This shell script takes care of starting and stopping
+#                 named (BIND DNS server).
+#
+# chkconfig: - 13 87
+# description: named (BIND) is a Domain Name Server (DNS) \
+# that is used to resolve host names to IP addresses.
+# probe: true
+
+### BEGIN INIT INFO
+# Provides: $named
+# Required-Start: $local_fs $network $syslog
+# Required-Stop: $local_fs $network $syslog
+# Default-Start:
+# Default-Stop: 0 1 2 3 4 5 6
+# Short-Description: start|stop|status|restart|try-restart|reload|force-reload DNS server
+# Description: control ISC BIND implementation of DNS server
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+[ -r /etc/sysconfig/named ] && . /etc/sysconfig/named
+
+RETVAL=0
+export KRB5_KTNAME=${KEYTAB_FILE:-/etc/named.keytab}
+
+named='named'
+if [ -x /usr/sbin/named-sdb ]; then
+        named='named-sdb'
+fi
+
+# Don't kill named during clean-up
+NAMED_SHUTDOWN_TIMEOUT=${NAMED_SHUTDOWN_TIMEOUT:-25}
+
+if [ -n "$ROOTDIR" ]; then
+   ROOTDIR=`echo $ROOTDIR | sed 's#//*#/#g;s#/$##'`;
+   rdl=`/usr/bin/readlink $ROOTDIR`;
+   if [ -n "$rdl" ]; then
+      ROOTDIR="$rdl";
+   fi;
+fi
+
+PIDFILE="/var/run/named/named.pid"
+
+ROOTDIR_MOUNT='/etc/named /etc/pki/dnssec-keys /var/named /etc/named/named.conf
+/etc/named.dnssec.keys /etc/named.rfc1912.zones /etc/rndc.conf /etc/rndc.key
+/usr/lib64/bind /usr/lib/bind /etc/named.iscdlv.key /etc/named.root.key'
+
+mount_chroot_conf()
+{
+  if [ -n "$ROOTDIR" ]; then
+    for all in $ROOTDIR_MOUNT; do
+      # Skip nonexistant files
+      [ -e "$all" ] || continue
+
+      # If mount source is a file
+      if ! [ -d "$all" ]; then
+        # mount it only if it is not present in chroot or it is empty
+        if ! [ -e "$ROOTDIR$all" ] || [ `stat -c'%s' "$ROOTDIR$all"` -eq 0 ]; then
+          touch "$ROOTDIR$all"
+          mount --bind "$all" "$ROOTDIR$all"
+        fi
+else
+        # Mount source is a directory. Mount it only if directory in chroot is
+        # empty.
+        if [ -e "$all" ] && [ `ls -1A $ROOTDIR$all | wc -l` -eq 0 ]; then
+          mount --bind "$all" "$ROOTDIR$all"
+        fi
+      fi
+    done
+  fi
+}
+
+umount_chroot_conf()
+{
+  if [ -n "$ROOTDIR" ]; then
+    for all in $ROOTDIR_MOUNT; do
+      # Check if file is mount target. Do not use /proc/mounts because detecting
+      # of modified mounted files can fail.
+      if mount | grep -q '.* on '"$ROOTDIR$all"' .*'; then
+        umount "$ROOTDIR$all"
+        # Remove temporary created files
+        [ -f "$all" ] && rm -f "$ROOTDIR$all"
+      fi
+    done
+  fi
+}
+
+pidofnamed() {
+        pidofproc -p "$ROOTDIR/$PIDFILE" "$named";
+}
+
+# Check if all what named needs running
+start()
+{
+  [ "$EUID" != "0" ] && exit 4
+
+  # Source networking configuration.
+  [ -r /etc/sysconfig/network ] && . /etc/sysconfig/network
+
+  # Check that networking is up
+  [ "${NETWORKING}" = "no" ] && exit 1
+
+
+  [ -x /usr/sbin/"$named" ] || exit 5
+
+  if [ ! -s /etc/rndc.key ]; then
+    # Generate rndc.key if doesn't exist
+    echo -n $"Generating /etc/rndc.key:"
+    if /usr/sbin/rndc-confgen -a > /dev/null 2>&1; then
+      chmod 640 /etc/rndc.key
+      chown root.named /etc/rndc.key
+      [ -x /sbin/restorecon ] && /sbin/restorecon /etc/rndc.key
+      success $"/etc/rndc.key generation"
+      echo
+    else
+      failure $"/etc/rndc.key generation"
+      echo
+    fi
+  fi
+# Handle -c option
+  previous_option='unspecified';
+  for a in $OPTIONS; do
+    if [ $previous_option = '-c' ]; then
+      named_conf=$a;
+    fi;
+    previous_option=$a;
+  done;
+
+  named_conf=${named_conf:-/etc/named/named.conf};
+
+  if [ ! -f $named_conf ]; then
+    cp /etc/named.conf.orig $named_conf
+  fi
+
+  mount_chroot_conf
+
+  if [ ! -r $ROOTDIR$named_conf ]; then
+    echo 'Cannot find configuration file. You could create it by system-config-bind'
+    exit 6;
+  fi;
+
+  [ -x /sbin/portrelease ] && /sbin/portrelease named &>/dev/null || :
+
+  # all pre-start is done, lets start named
+  echo -n $"Starting named: "
+  if [ -n "`pidofnamed`" ]; then
+    echo -n $"named: already running"
+    success
+    echo
+    exit 0;
+  fi;
+
+  if ! [ "$DISABLE_ZONE_CHECKING" = yes ]; then
+    ckcf_options='-z'; # enable named-checkzone for each zone (9.3.1+) !
+  fi;
+
+  if [ -n "${ROOTDIR}" -a "x${ROOTDIR}" != "x/" ]; then
+    OPTIONS="${OPTIONS} -t ${ROOTDIR}"
+    ckcf_options="$ckcf_options -t ${ROOTDIR}";
+    [ -s /etc/localtime ] && cp -fp /etc/localtime ${ROOTDIR}/etc/localtime;
+  fi
+
+  RETVAL=0
+  # check if configuration is correct
+  if [ -x /usr/sbin/named-checkconf ] && [ -x /usr/sbin/named-checkzone ] && /usr/sbin/named-checkconf $ckcf_options ${named_conf} >/dev/null 2>&1; then
+
+    daemon --pidfile "$ROOTDIR/$PIDFILE" /usr/sbin/"$named" -u named -f ${OPTIONS};
+    RETVAL=$?
+    if [ $RETVAL -eq 0 ]; then
+      rm -f /var/run/{named,named-sdb}.pid;
+      ln -s $ROOTDIR/"$PIDFILE" /var/run/"$named".pid;
+    fi;
+
+  else
+    named_err="`/usr/sbin/named-checkconf $ckcf_options $named_conf 2>&1`";        
+    echo
+    echo "Error in named configuration:";
+    echo "$named_err";
+    failure
+    echo
+    [ -x /usr/bin/logger ] && echo "$named_err" | /usr/bin/logger -pdaemon.error -tnamed;
+    umount_chroot_conf
+    exit 2;
+  fi;
+echo
+  if [ $RETVAL -eq 0 ]; then
+      touch /var/dockerlock/subsys/named;
+  else
+    umount_chroot_conf
+    exit 7;
+  fi
+  return 0;
+}
+
+stop() {
+  [ "$EUID" != "0" ] && exit 4
+
+  # Stop daemons.
+  echo -n $"Stopping named: "
+  [ -x /usr/sbin/rndc ] && /usr/sbin/rndc stop >/dev/null 2>&1;
+  RETVAL=$?
+  # was rndc successful?
+  [ "$RETVAL" -eq 0 ] || \
+    killproc -p "$ROOTDIR/$PIDFILE" "$named" -TERM >/dev/null 2>&1
+
+  timeout=0
+  RETVAL=0
+  while pidofnamed &>/dev/null; do
+    if [ $timeout -ge $NAMED_SHUTDOWN_TIMEOUT ]; then
+      RETVAL=1
+      break
+    else
+      sleep 2 && echo -n "."
+      timeout=$((timeout+2))
+    fi;
+  done
+
+  umount_chroot_conf
+
+  # remove pid files
+  if [ $RETVAL -eq 0 ]; then
+      rm -f /var/dockerlock/subsys/named
+    rm -f /var/run/{named,named-sdb}.pid
+  fi;
+
+  if [ $RETVAL -eq 0 ]; then
+    success
+  else
+    failure
+    RETVAL=1
+  fi;
+  echo
+  return $RETVAL
+}
+
+
+rhstatus() {
+  [ -x /usr/sbin/rndc ] && /usr/sbin/rndc status;
+  status -p "$ROOTDIR/$PIDFILE" -l named /usr/sbin/"$named";
+  return $?
+}       
+restart() {
+        stop
+        start
+}
+reload() {
+        [ "$EUID" != "0" ] && exit 
+
+        echo -n $"Reloading "$named": "
+        p=`pidofnamed`
+        RETVAL=$?
+        if [ "$RETVAL" -eq 0 ]; then 
+            /usr/sbin/rndc reload >/dev/null 2>&1 || /bin/kill -HUP $p;
+            RETVAL=$?
+        fi
+        [ "$RETVAL" -eq 0 ] && success $"$named reload" || failure $"$named reload"
+        echo
+        return $RETVAL
+}
+
+checkconfig() {
+        ckcf_options='-z';
+        if [ -n "${ROOTDIR}" -a "x${ROOTDIR}" != "x/" ]; then
+                ckcf_options="$ckcf_options -t ${ROOTDIR}";
+                mount_chroot_conf
+        fi;
+        if [ -x /usr/sbin/named-checkconf ] && [ -x /usr/sbin/named-checkzone ] && /usr/sbin/named-checkconf $ckcf_options ${named_conf} ; then
+                umount_chroot_conf
+                return 0;
+        else
+                umount_chroot_conf
+                return 1;
+        fi
+}
+
+# See how we were called.
+case "$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        status)
+                rhstatus;
+                RETVAL=$?
+                ;;
+        restart)
+                restart
+                ;;
+        condrestart|try-restart)
+        if [ -e /var/dockerlock/subsys/named ]; then restart; fi
+                ;;
+        reload)
+                reload
+                ;;
+        force-reload)
+                if ! reload; then restart; fi
+                ;;
+        checkconfig|configtest|check|test)
+                checkconfig
+                ;;
+        *)
+                echo $"Usage: $0 {start|stop|status|restart|try-restart|reload|force-reload}"
+                [ "x$1" = "x" ] && exit 0
+                exit 2
+esac
+
+exit $RETVAL

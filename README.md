@@ -26,3 +26,62 @@ Each Dockerfile should contain a README that includes the following:
  * If creating a container for a specific language, specify the version of that language.
  * If yum is used during the build process, run a clean afterwards to reduce the image size.
 
+## Building All The Things
+
+An example of buidling all images found within this git repository can be done
+with the following two bash for loops from the base dir of your git clone:
+
+--
+```bash
+# Building everything from centos:centos6 base image
+for dir in ./*/centos6
+do
+    pushd $dir &> /dev/null
+        # tmp var for short dirname
+        tmp=$(dirname $dir)
+
+        # strip all characters leading up to and including '/'
+        appname=${tmp##*/}
+        disttag=${dir##*/}
+
+        docker build -t $USER/${appname}:${disttag} .
+    popd &> /dev/null;
+done
+
+# Building everything from centos:centos7 base image
+for dir in ./*/centos7
+do
+    pushd $dir &> /dev/null
+        # tmp var for short dirname
+        tmp=$(dirname $dir)
+
+        # strip all characters leading up to and including '/'
+        appname=${tmp##*/}
+        disttag=${dir##*/}
+
+        docker build -t $USER/${appname}:${disttag} .
+    popd &> /dev/null
+done
+```
+--
+
+You'll notice that the appname/disttag structure is laid out on purpose, so if
+you would prefer to only build a single image this can be done by either
+following the specific README.md contained with the Dockerfile or with the
+below guideline:
+
+```bash
+# $appname and $disttag should be something along the lines of 'httpd' and 
+# 'centos7' respectively
+cd $appname/$disttag
+
+docker build -t $USER/${appname}:${disttag} .
+```
+
+--
+
+## Notes
+
+Known issues:
+
+ * The earthquake container does not currently build for centos:centos6 due to an issue with libselinux multilib, this is know and has been [fixed](https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm) but we're waiting on a fresh compose in the [Docker Hub](https://registry.hub.docker.com/_/centos/).
