@@ -84,4 +84,4 @@ docker build -t $USER/${appname}:${disttag} .
 
 Known issues:
 
- * The earthquake container does not currently build for centos:centos6 due to an issue with libselinux multilib, this is know and has been [fixed](https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm) but we're waiting on a fresh compose in the [Docker Hub](https://registry.hub.docker.com/_/centos/).
+ * None at this time.
