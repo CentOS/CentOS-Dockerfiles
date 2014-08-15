@@ -25,7 +25,7 @@ Run it:
 Check docker logs after running to see MySQL root password and Wordpress MySQL password, as so:
 
 ```
-# echo $(docker logs $CID | grep password)
+# echo "$(docker logs $CID | grep password)"
 ```
 
 (note: you won't need the mysql root or the wordpress db password normally)
