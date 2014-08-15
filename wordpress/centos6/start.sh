@@ -16,9 +16,9 @@ echo ssh user password: $SSH_USERPASS
 
 __mysql_config() {
 # Hack to get MySQL up and running... I need to look into it more.
-yum -y erase community-mysql community-mysql-server
+yum -y erase mysql mysql-server
 rm -rf /var/lib/mysql/ /etc/my.cnf
-yum -y install community-mysql community-mysql-server
+yum -y install mysql mysql-server
 mysql_install_db
 chown -R mysql:mysql /var/lib/mysql
 /usr/bin/mysqld_safe & 
