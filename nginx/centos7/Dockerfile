@@ -11,7 +11,7 @@ RUN yum -y update; yum clean all
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm; yum clean all
 RUN yum -y install nginx; yum clean all
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-RUN echo "nginx on CentOS 6 inside Docker" > /usr/share/nginx/html/index.html
+RUN echo "nginx on CentOS 7 inside Docker" > /usr/share/nginx/html/index.html
 
 EXPOSE 80
 
