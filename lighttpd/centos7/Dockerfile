@@ -9,7 +9,7 @@ MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 # install main packages:
 RUN yum -y update; yum clean all;
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm; yum clean all
+RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-1.noarch.rpm; yum clean all
 RUN yum -y install openssh-server supervisor rsyslog sudo pwgen lighttpd; yum clean all;
 
 # copy cfg files:
