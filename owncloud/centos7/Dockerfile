@@ -11,7 +11,7 @@ MAINTAINER The CentOS Project <cloud-ops@centos.org>
 RUN yum -y update; yum clean all
 
 # Install EPEL for owncloud packages
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm; yum clean all
+RUN yum -y install epel-release; yum clean all
 
 # Install owncloud owncloud-httpd owncloud-sqlite rpms
 RUN yum install -y owncloud{,-httpd,-sqlite}; yum clean all

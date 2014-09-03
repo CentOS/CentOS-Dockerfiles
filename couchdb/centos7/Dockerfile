@@ -8,7 +8,7 @@ FROM centos:centos7
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 RUN  yum -y update; yum clean all
-RUN  yum -y install https://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm
+RUN  yum -y install epel-release
 RUN  yum -y install couchdb; yum clean all
 
 RUN  sed -e 's/^bind_address = .*$/bind_address = 0.0.0.0/' -i /etc/couchdb/default.ini

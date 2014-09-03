@@ -9,7 +9,7 @@ MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 # install main packages:
 RUN yum -y update; yum clean all;
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm
+RUN yum -y install epel-release; yum clean all;
 RUN yum -y install bind-utils bind cronie logrotate supervisor openssh-server rsyslog sudo pwgen; yum clean all;
 
 # gen rndc key:
