@@ -9,7 +9,7 @@ MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 # Install the appropriate software
 RUN yum -y update; yum clean all
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm; yum clean all
+RUN yum -y install epel-release; yum clean all
 RUN yum -y install x11vnc firefox xorg-x11-server-Xvfb xorg-x11-twm tigervnc-server xterm xorg-x11-font dejavu-sans-fonts dejavu-serif-fonts xdotool; yum clean all
 
 # Add the xstartup file into the image

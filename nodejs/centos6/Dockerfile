@@ -8,7 +8,7 @@ FROM centos:centos6
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 RUN yum -y update; yum clean all
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm; yum clean all
+RUN yum -y install epel-release; yum clean all
 RUN yum -y install nodejs npm; yum clean all
 
 ADD . /src
