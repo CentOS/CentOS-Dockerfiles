@@ -28,7 +28,7 @@ Each Dockerfile should contain a README that includes the following:
 
 ## Building All The Things
 
-An example of buidling all images found within this git repository can be done
+An example of building all images found within this git repository can be done
 with the following two bash for loops from the base dir of your git clone:
 
 --
