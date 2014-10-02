@@ -1,0 +1,16 @@
+[Unit]
+Description=D-Bus System Message Bus
+Requires=dbus.socket
+After=syslog.target
+
+[Service]
+PIDFile=/var/run/messagebus.pid
+ExecStartPre=/bin/mkdir -p /var/run/dbus
+ExecStartPre=/bin/chmod g+w /var/run/ /var/run/dbus/
+ExecStart=/bin/dbus-daemon --system --fork
+ExecReload=/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
+ExecStopPost=/bin/rm -f /var/run/messagebus.pid
+OOMScoreAdjust=-900
+User=dbus
+Group=root
+PermissionsStartOnly=true

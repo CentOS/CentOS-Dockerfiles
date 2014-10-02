@@ -1,0 +1,67 @@
+#!/usr/bin/perl
+
+# Copyright 2014 Jan Pazdziora
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+use strict;
+use warnings FATAL => 'all';
+
+use IO::Socket::UNIX ();
+use Socket ();
+use POSIX ();
+
+sub daemonize {
+	open(STDERR, '>>', '/var/log/systemctl-socket-daemon.log')        || die "can't write log: $!";
+	open(STDOUT, '>&STDERR')     || die "can't write stdout to log: $!";
+	chdir("/")                      || die "can't chdir to /: $!";
+	open(STDIN,  '<', '/dev/null')     || die "can't read /dev/null: $!";
+	defined(my $pid = fork())       || die "can't fork: $!";
+	exit if $pid;                   # non-zero now means I am the parent
+	(POSIX::setsid() != -1)                || die "Can't start a new session: $!";
+}
+
+my ($socket_path, $socket_mode, $service) = @ARGV;
+if (not defined $socket_path or not defined $service) {
+	die "Usage: $0 /path/to/unix/socket service-to-run\n";
+}
+if (-e $socket_path) {
+	warn "Path [$socket_path] already exists, removing\n";
+	unlink $socket_path;
+}
+
+my $service_data = `/bin/systemctl show $service 2>&1`;
+if ($?) {
+	die "Failed to find service [$service]:\n$service_data";
+}
+
+my $socket = new IO::Socket::UNIX(
+	Type => Socket::SOCK_STREAM,
+	Local => $socket_path,
+	Listen => Socket::SOMAXCONN
+) or die "socket: $!\n";
+chmod oct($socket_mode), $socket_path;
+
+daemonize();
+
+while (1) {
+	next unless my $connection = $socket->accept;
+	my $pid = fork();
+	if ($pid == 0) {
+		*STDIN = $connection;
+		*STDOUT = $connection;
+		exec '/bin/systemctl', 'start', $service;
+		die "exec should have never reached here\n";
+	}
+}
+

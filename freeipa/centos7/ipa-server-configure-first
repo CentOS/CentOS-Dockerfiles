@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# Copyright 2014 Jan Pazdziora
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+function usage () {
+	if [ -n "$1" ] ; then
+		echo $1 >&2
+	else
+		echo "Start as docker run -h \$FQDN_HOSTNAME -e PASSWORD=\$THE_ADMIN_PASSWORD image" >&2
+	fi
+	exit 1
+}
+
+function stop_running () {
+	systemctl stop-running
+}
+trap stop_running TERM
+
+systemd-tmpfiles --remove --create 2>&1 | grep -v 'Failed to replace specifiers'
+
+rm -f /etc/systemctl-lite/running/*
+
+CAN_EDIT_RESOLV_CONF=0
+cp -f /etc/resolv.conf /etc/resolv.conf.docker
+if umount /etc/resolv.conf 2> /dev/null ; then
+	CAN_EDIT_RESOLV_CONF=1
+	cp -f /etc/resolv.conf.docker /etc/resolv.conf
+fi
+
+if [ -f /etc/ipa/ca.crt ] ; then
+	echo "FreeIPA server is already configured, starting the services."
+	if [ "$CAN_EDIT_RESOLV_CONF" == "1" ] ; then
+		if [ -f /etc/resolv.conf.ipa ] ; then
+			perl -pe 's/^(nameserver).*/$1 127.0.0.1/' /etc/resolv.conf.ipa > /etc/resolv.conf
+		fi
+	fi
+	systemctl start-enabled
+	kdestroy -A
+	kinit -k
+	(
+		echo "server 127.0.0.1"
+		echo "update delete $( hostname -f ) A"
+		MY_IP=$( /sbin/ip addr show | awk '/inet .*global/ { split($2,a,"/"); print a[1]; }' | head -1 )
+		echo "update add $( hostname -f ) 180 A $MY_IP"
+		echo "send"
+		echo "quit"
+	) | nsupdate -g
+	kdestroy -A
+	echo "FreeIPA server started."
+else
+	HOSTNAME_FQDN=$( hostname -f )
+	HOSTNAME_SHORT=${HOSTNAME_FQDN%%.*}
+	DOMAIN=${HOSTNAME_FQDN#*.}
+	if [ "$HOSTNAME_SHORT.$DOMAIN" != "$HOSTNAME_FQDN" ] ; then
+		usage
+	fi
+
+	if [ -z "$PASSWORD" ] ; then
+		usage
+	fi
+
+	REALM=${DOMAIN^^}
+
+	DEBUG_OPT=
+	if [ -n "$DEBUG" ] ; then
+		DEBUG_OPT=-d
+	fi
+
+	if [ -z "$FORWARDER" ] ; then
+		FORWARDER=$( awk '$1 == "nameserver" { print $2; exit }' /etc/resolv.conf )
+	fi
+	if [ "$FORWARDER" == '127.0.0.1' ] ; then
+		FORWARDER=--no-forwarders
+	else
+		FORWARDER=--forwarder=$FORWARDER
+	fi
+
+	if [ "$CAN_EDIT_RESOLV_CONF" == "0" ] ; then
+		find /usr -name bindinstance.py | xargs sed -i '/changing resolv.conf to point to ourselves/s/^/#/'
+	fi
+
+	if /usr/sbin/ipa-server-install -r $REALM -p $PASSWORD -a $PASSWORD -U $DEBUG_OPT --setup-dns $FORWARDER < /dev/null ; then
+		cp -f /etc/resolv.conf /etc/resolv.conf.ipa
+		echo "FreeIPA server configured."
+	else
+		ret=$?
+		echo "FreeIPA server configuration failed."
+		exit $ret
+	fi
+fi
+
+if perl -e '( -t ) ? exit 0 : exit 1' ; then
+	echo 'Starting interactive shell.'
+	/bin/bash
+else
+	echo 'Go loop.'
+	while true ; do sleep 1000 ; done
+fi
+
