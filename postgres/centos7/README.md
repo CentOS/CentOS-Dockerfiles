@@ -1,41 +1,42 @@
 dockerfiles-centos-postgres
 ===========================
 
-CentOS 7 dockerfile for PostgreSQL
+Dockerfile to build PostgreSQL on CentOS 7
 
-1.	To build
+Setup
+-----
 
-Copy the sources down and do the build-
+To build the image
 
-    # docker build -rm -t username/postgresql:centos7 . |& tee postgres_build.log
+    # docker build --rm -t <yourname/postgresql .
 
-2.	To run 
 
-If port 5432 is open on your host:
+Launching PostgreSQL
+--------------------
 
-    # docker run -d -p 5432:5432 username/postgresql:centos7
+#### Quick Start (not recommended for production use)
 
-or to assign a random port that maps to port 5432 on the container:
+    docker run --name=postgresql -d -p 5432:5432 <yourname>/postgresql
 
-    # docker run -d -p 5432 username/postgresql:centos7
 
-To see the random port that the container is listening on:
+To connect to the container as the administrative `postgres` user:
 
-    # docker ps
+    docker run -it --rm --volumes-from=postgresql <yourname>/postgres sudo -u
+    postgres -H psql
 
-3.	To test 
 
-To find the IP address, get the container ID:
+Creating a database at launch
+-----------------------------
 
-    # docker ps
+You can create a postgresql superuser at launch by specifying `DB_USER` and
+`DB_PASS` variables. You may also create a database by using `DB_NAME`. 
 
-Then get the IP addr:
+    docker run --name postgresql -d \
+    -e 'DB_USER=username' \
+    -e 'DB_PASS=ridiculously-complex_password1' \
+    -e 'DB_NAME=my_database' \
+    <yourname>/postgresql
 
-    # docker inspect 7a1e1a80e948 | grep -i ipaddress
+To connect to your database with your newly created user:
 
-Now connect to the database.  In this case, it's called 'dockerdb' and the
-username is 'dockeruser' with a password of 'password', which was set via the
-postgres_user.sh script.
-
-    # psql -h 172.17.0.x -U dockeruser -d dockerdb
-
+    psql -U username -h $(docker inspect --format {{.NetworkSettings.IPAddress}} postgresql)
