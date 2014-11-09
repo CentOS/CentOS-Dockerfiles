@@ -11,7 +11,7 @@ Each Dockerfile should contain a README that includes the following:
  * Instructions for building the Docker image
 
 --
-    For example: docker build -rm -t my/image
+    For example: docker build --rm=true -t my/image .
 --
 
  * Instructions for running the image, including examples for persistent data, port mapping, etc.
