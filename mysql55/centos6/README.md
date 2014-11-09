@@ -12,11 +12,11 @@ Initialize a new DB:
 
 Run the DB:
 
-   $> docker run -d --volumes-from=dbdata centos/centos6-mysql55
+    $> docker run -d --volumes-from=dbdata centos/centos6-mysql55
 
 Connect:
 
-   $> mysql -h X.X.X.X -uroot -pwelcome0
+    $> mysql -h X.X.X.X -uroot -pwelcome0
 
 Environment
 ===========
