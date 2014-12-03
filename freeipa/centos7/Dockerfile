@@ -4,12 +4,12 @@ FROM centos:centos7
 MAINTAINER Jan Pazdziora
 
 RUN yum swap -y -- remove fakesystemd -- install systemd systemd-libs && yum clean all
+RUN yum -y update && yum clean all
 
-# Leave this commented for now. dep resolution issues on selinux-policy
-#ADD http://copr.fedoraproject.org/coprs/mkosek/freeipa/repo/epel-7/mkosek-freeipa-epel-7.repo /etc/yum.repos.d/
+RUN curl -o /etc/yum.repos.d/mkosek-freeipa-epel-7.repo https://copr.fedoraproject.org/coprs/mkosek/freeipa/repo/epel-7/mkosek-freeipa-epel-7.repo
 
 # Install FreeIPA server
-RUN mkdir -p /run/lock ; yum install -y ipa-server bind bind-dyndb-ldap perl && yum clean all
+RUN mkdir -p /run/lock ; yum install -y freeipa-server bind bind-dyndb-ldap perl && yum clean all
 
 ADD dbus.service /etc/systemd/system/dbus.service
 RUN ln -sf dbus.service /etc/systemd/system/messagebus.service

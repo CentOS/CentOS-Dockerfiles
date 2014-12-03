@@ -3,7 +3,7 @@
 This repository contains the Dockerfile and associated assets for
 building a FreeIPA server Docker image from the official yum repo.
 
-Install docker v0.11+:
+Install docker 1.2+:
 
     yum install -y docker-io	# on Fedoras
     yum install -y docker	# on RHEL 7
@@ -18,26 +18,7 @@ To build the image, run in the root of the repository:
 
 To run the container:
 
-    docker run --dns 127.0.0.1 --name freeipa-server-container -ti -h ipa.example.test -e PASSWORD=Secret123 freeipa-server
-
-or
-
-    docker run --privileged --name freeipa-server-container -ti -h ipa.example.test -e PASSWORD=Secret123 freeipa-server
-
-Since FreeIPA server includes DNS server, it makes sense to point
-its own resolv.conf to itself with the `--dns` option. In that case
-however, FreeIPA will not configure forwarder to DNS server
-configured on the host because it does not know its IP address, unless
-you use environment variable `FORWARDER` to tell the container --
-use `-e FORWARDER=10.11.12.13` option to `docker run` to set the
-forwarder value.
-
-The `--privileged` option gives the container extended privileges
-which is needed to modify resolv.conf. With `--privileged`, you do not
-need to set `--dns 127.0.0.1` because the setup will be able to set
-it for you from inside of the container, while using the original
-nameserver value from resolv.conf as forwarder IP address. You can
-of course also use `-e FORWARDER=...` explicitly.
+    docker run --name freeipa-server-container -ti -h ipa.example.test -e PASSWORD=Secret123 freeipa-server
 
 The option `--name` assigns the container a name that can be used
 later with `docker start`, `docker stop` and other commands.

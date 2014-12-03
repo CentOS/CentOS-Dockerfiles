@@ -34,7 +34,7 @@ rm -f /etc/systemctl-lite/running/*
 
 CAN_EDIT_RESOLV_CONF=0
 cp -f /etc/resolv.conf /etc/resolv.conf.docker
-if umount /etc/resolv.conf 2> /dev/null ; then
+if echo '# test access' >> /etc/resolv.conf || umount /etc/resolv.conf 2> /dev/null ; then
 	CAN_EDIT_RESOLV_CONF=1
 	cp -f /etc/resolv.conf.docker /etc/resolv.conf
 fi
