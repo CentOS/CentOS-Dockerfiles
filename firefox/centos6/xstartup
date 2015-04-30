@@ -13,6 +13,7 @@ OS=`uname -s`
 #       ;;
 #   esac
 # fi
+export LC_ALL=C
 if [ -x /etc/X11/xinit/xinitrc ]; then
   exec /etc/X11/xinit/xinitrc
 fi
