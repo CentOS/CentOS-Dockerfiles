@@ -1,7 +1,7 @@
-dockerfiles-sct-mariadb
-========================
+MariaDB Dockerfile
+==================
 
-Based on Stephen Tweedie's mariadb Dockerfile
+Based on CentOS7 original mariadb Dockerfile, based on Stephen Tweedie's mariadb Dockerfile...
 
 This repo contains a recipe for making Docker container for mariadb on CentOS7.
 
@@ -14,7 +14,7 @@ Check your Docker version
 
 Perform the build
 
-    # docker build --rm -t <yourname>/mariadb .
+    # docker build --rm --tag <yourname>/mariadb55 .
 
 Check the image out.
 
@@ -25,33 +25,31 @@ Launching MariaDB
 
 ### Quick start (not recommended for production use): ###
 
-    # docker run --name=mariadb -d -p 3306:3306 <yourname>/mariadb
+    # docker run --name=mariadb -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<password> <yourname>/mariadb
 
 ### Recommended start ###
+
 To use a separate data volume for /var/lib/mysql (recommended, to allow image update without
 losing database contents):
-
 
 Create a data volume container: (it doesn't matter what image you use
 here, we'll never run this container again; it's just here to
 reference the data volume)
 
-    # docker run --name=mariadb-data -v /var/lib/mysql <yourname>/mariadb true
+    # docker run --name=mariadb-data -v /var/lib/mysql <yourname>/mariadb55 true
 
-Initialise it using a temporary one-time mariadb container:
+And now create the daemonized mariadb container:
 
-    # docker run -rm --volumes-from=mariadb-data <yourname>/mariadb /config_mariadb.sh
+    # docker run --name=mariadb -d -p 3306:3306 --volumes-from=mariadb-data -e MYSQL_ROOT_PASSWORD=<password> <yourname>/mariadb55
 
-And now create the new persistent mariadb container:
-
-    # docker run --name=mariadb -d -p 3306:3306 --volumes-from=mariadb-data <yourname>/mariadb
+You could also create an additional database by passing MYSQL_DATABASE and/or create an additional user passing MYSQL_USER to the container.
 
 Using your MariaDB container
 ----------------------------
 
 Keep in mind the initial password set for mariadb is: mysqlPassword.  Change it now:
 
-    # mysqladmin --protocol=tcp -u testdb -pmysqlPassword password myNewPass
+    # mysqladmin --protocol=tcp -u testdb -p<password> password myNewPass
 
 Connecting to mariadb:
 
