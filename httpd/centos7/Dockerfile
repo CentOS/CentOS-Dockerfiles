@@ -1,18 +1,13 @@
-# "ported" by Adam Miller <maxamillion@fedoraproject.org> from
-#   https://github.com/fedora-cloud/Fedora-Dockerfiles
-#
-# Originally written for Fedora-Dockerfiles by
-#   "Scott Collier" <scollier@redhat.com>
+FROM centos:latest
+MAINTAINER http://www.centos.org
 
-FROM centos:centos7
-MAINTAINER The CentOS Project <cloud-ops@centos.org>
+RUN yum -y update && yum clean all
+RUN yum -y install httpd && yum clean all
 
-RUN yum -y update; yum clean all
-RUN yum -y install httpd; yum clean all
 EXPOSE 80
 
 # Simple startup script to avoid some issues observed with container restart 
-ADD run-httpd.sh /run-httpd.sh
-RUN chmod -v +x /run-httpd.sh
+ADD run-apache.sh /run-apache.sh
+RUN chmod -v +x /run-apache.sh
 
-CMD ["/run-httpd.sh"]
+CMD ["/run-apache.sh"]
