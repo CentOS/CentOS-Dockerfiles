@@ -10,7 +10,7 @@ RUN yum -y install httpd && yum clean all
 EXPOSE 80
 
 # Simple startup script to avoid some issues observed with container restart 
-COPY run-apache.sh /
-RUN chmod -v +x /run-apache.sh
+ADD run-httpd.sh /run-httpd.sh
+RUN chmod -v +x /run-httpd.sh
 
-CMD ["/run-apache.sh"]
+CMD ["/run-httpd.sh"]
