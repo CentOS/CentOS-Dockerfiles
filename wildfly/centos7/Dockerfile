@@ -1,5 +1,11 @@
 # Use latest Fedora image as the base
 FROM centos:latest
+MAINTAINER http://www.centos.org
+
+LABEL Vendor="CentOS"
+LABEL License=GPLv2
+LABEL Version=8.2.0.Final
+
 
 # Update base image
 RUN yum -y update && yum clean all
