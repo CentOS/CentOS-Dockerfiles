@@ -12,7 +12,7 @@ RUN yum -y install tar java-1.7.0-openjdk-devel saxon \
     augeas bsdtar shadow-utils && yum clean all
 
 # Set the WILDFLY_VERSION env variable
-ENV WILDFLY_VERSION 8.1.0.Final
+ENV WILDFLY_VERSION 8.2.0.Final
 
 # Create the wildfly user and group
 RUN groupadd -r wildfly -g 433 && useradd -u 431 -r -g wildfly -d /opt/wildfly -s /sbin/nologin -c "WildFly user" wildfly
@@ -37,4 +37,4 @@ USER wildfly
 
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interface
-CMD ["/opt/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+CMD ["/opt/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
