@@ -7,7 +7,7 @@ To build:
 
 Copy the sources down -
 
-    # docker build -rm -t <username>/nginx:centos7 .
+    # docker build --rm --tag <username>/nginx:centos7 .
 
 To run:
 
