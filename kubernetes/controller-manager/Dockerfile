@@ -1,4 +1,6 @@
 FROM fedora
 MAINTAINER Solly Ross <sross@redhat.com>
 
-ENTRYPOINT ["/usr/bin/kube-controller-manager"]
+COPY launch.sh /usr/bin/kube-controller-manager-docker.sh
+
+ENTRYPOINT ["/usr/bin/kube-controller-manager-docker.sh"]

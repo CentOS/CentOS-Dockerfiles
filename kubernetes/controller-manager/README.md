@@ -24,3 +24,6 @@ To run:
 ```
 
 Refer to the Kubernetes documentation for more information about applicable options.
+Options will be pulled the command line, as well as from `/etc/kubernetes/{config,controller-manager}`,
+so you can mount an existing `/etc/kubernetes` folder into the container to reuse existing
+configuration.
