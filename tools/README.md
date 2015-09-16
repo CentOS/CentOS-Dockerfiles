@@ -3,7 +3,7 @@ dockerfiles-centos-tools
 
 Dockerfile to build a tools image on CentOS 7
 
-Tools image is intended to be used as [Super Privileged Container](http://developerblog.redhat.com/2014/11/06/introducing-a-super-privileged-container-concept/) (SPC) to extend the set of tools provided by Atomic Host. 
+[Tools image](http://developerblog.redhat.com/2015/03/11/introducing-the-rhel-container-for-rhel-atomic-host/) is intended to be used as [Super Privileged Container](http://developerblog.redhat.com/2014/11/06/introducing-a-super-privileged-container-concept/) (SPC) to extend the set of tools provided by Atomic Host. More tips how to use the image can be found at [Project Atomic blog](http://www.projectatomic.io/blog/2015/09/introducing-the-fedora-tools-image-for-fedora-atomic-host/).
 
 To build, copy the sources down and call:
 
