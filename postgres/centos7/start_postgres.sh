@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DB_NAME=${DB_NAME:-}
-DB_USER=${DB_USER:-}
-DB_PASS=${DB_PASS:-}
+DB_NAME=${POSTGRES_DB:-}
+DB_USER=${POSTGRES_USER:-}
+DB_PASS=${POSTGRES_PASSWORD:-}
 PG_CONFDIR="/var/lib/pgsql/data"
 
 __create_user() {
