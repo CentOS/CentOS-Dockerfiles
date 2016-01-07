@@ -48,7 +48,6 @@ if [ "$1" = 'mysqld_safe' ]; then
 		set -- "$@" --init-file="$tempSqlFile"
 	fi
 	
-	chown -R mysql:mysql "$DATADIR"
 fi
 
 exec "$@"
