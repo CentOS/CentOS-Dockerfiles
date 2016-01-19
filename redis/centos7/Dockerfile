@@ -22,4 +22,5 @@ RUN ./fix-permissions.sh /var/log/redis/ && \
 # everywhere else
 USER 997
 	
-ENTRYPOINT ["redis-server", "/etc/redis.conf", "--bind", "0.0.0.0"]
+ENTRYPOINT ["redis-server"]
+CMD ["/etc/redis.conf", "--bind", "0.0.0.0"]
