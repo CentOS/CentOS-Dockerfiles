@@ -13,6 +13,9 @@ RUN yum -y install redis; yum clean all
 
 EXPOSE 6379
 
+# log on stdout instead of writing to file
+RUN sed -i 's/^\(logfile\s*\).*$/\1""/g' /etc/redis.conf
+
 # Fix permissions to allow for running on openshift
 COPY fix-permissions.sh ./
 RUN ./fix-permissions.sh /var/log/redis/ && \
