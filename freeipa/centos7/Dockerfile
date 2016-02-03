@@ -6,10 +6,10 @@ MAINTAINER Jan Pazdziora
 RUN yum swap -y -- remove fakesystemd -- install systemd systemd-libs && yum clean all
 RUN yum -y update && yum clean all
 
-RUN curl -o /etc/yum.repos.d/mkosek-freeipa-epel-7.repo https://copr.fedoraproject.org/coprs/mkosek/freeipa/repo/epel-7/mkosek-freeipa-epel-7.repo
+RUN curl -o /etc/yum.repos.d/mkosek-freeipa-epel-7.repo https://copr.fedorainfracloud.org/coprs/mkosek/freeipa/repo/epel-7/mkosek-freeipa-epel-7.repo
 
 # Install FreeIPA server
-RUN mkdir -p /run/lock ; yum install -y freeipa-server bind bind-dyndb-ldap perl && yum clean all
+RUN mkdir -p /run/lock ; yum install -y freeipa-server ipa-server-dns bind bind-dyndb-ldap perl && yum clean all
 
 ADD dbus.service /etc/systemd/system/dbus.service
 RUN ln -sf dbus.service /etc/systemd/system/messagebus.service
