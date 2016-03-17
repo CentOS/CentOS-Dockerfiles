@@ -1,18 +1,18 @@
 #!/bin/bash
 
-set -e
+set -x
 
 create_named_data_dir() {
   mkdir -p /named
   chmod -R 0755 /named
-  chown -R root:named /named
+  chown -R named:named /named
 
   if [ ! -d /named/etc ]; then
     mkdir /named/etc
     chmod -R 0755 /named/etc
-    chown -R root:named /named/etc
+    chown -R named:named /named/etc
 
-    mv /etc/named.* /named/etc
+    mv /etc/named.* /named/etc/
     mv /named.conf.default /named/etc/named.conf
   fi
 
@@ -25,8 +25,11 @@ create_named_data_dir() {
   if [ ! -d /named/var ]; then
     mkdir -p /named/var/data
     mkdir -p /named/var/dynamic
-    chown -R root:named /named/var
+    chown -R named:named /named/var
   fi
+
+  (   cd /var/named ; mv named.ca named.empty named.localhost named.loopback /named/var/ )
+
   rm -rf /var/named
   ln -sf /named/var /var/named
 
@@ -43,14 +46,14 @@ create_named_data_dir
 if [[ ${1:0:1} = '-' ]]; then
   EXTRA_ARGS="$@"
   set --
-elif [[ ${1} == named ]]; then
+elif [[ ${1} == '/usr/sbin/named' ]]; then
   EXTRA_ARGS="${@:2}"
   set --
 fi
 
 if [[ -z ${1} ]]; then
   echo "Starting named..."
-  exec /usr/sbin/named -u named -g ${EXTRA_ARGS}
+  exec /usr/sbin/named -4 -u named -c /named/etc/named.conf -g ${EXTRA_ARGS}
 else
   exec "$@"
 fi

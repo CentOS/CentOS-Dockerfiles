@@ -1,7 +1,8 @@
 dockerfiles-centos-bind
 ========================
 
-CentOS 7 dockerfile for Bind9 - based resolving & cache'ing (DNS server)
+CentOS 7 dockerfile for Bind9 - based resolving & cache'ing (DNS server). It is
+listening on IPv4 only.
 
 Configuration
 -----
@@ -15,8 +16,8 @@ Installation
 
 Prepare directories for logs and configurations (e.g. if want to use zone files):
 
-    $ sudo mkdir /srv/docker/bind9/{etc,var,log} -p
-    $ sudo chcon -Rt svirt_sandbox_file_t /srv/docker/bind9/{etc,var,log}
+    $ sudo mkdir -p /srv/docker/bind9
+    $ sudo chcon -Rt svirt_sandbox_file_t /srv/docker/bind9
 
 You will find default CentOS configuration files in /srv/docker/bind9/etc after
 the first start of this container images.

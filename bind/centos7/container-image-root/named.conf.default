@@ -8,8 +8,8 @@
 //
 
 options {
-	listen-on port 53 { 127.0.0.1; };
-	listen-on-v6 port 53 { ::1; };
+	listen-on port 53 { any; };
+	
 	directory 	"/named/var";
 	dump-file 	"/named/var/data/cache_dump.db";
 	statistics-file "/named/var/data/named_stats.txt";
@@ -44,10 +44,6 @@ options {
 };
 
 logging {
-        channel default_debug {
-                file "data/named.run";
-                severity dynamic;
-        };
         channel log_dns {
                 file "/named/log/named.log" versions 3 size 10m;
                 print-category yes;
