@@ -42,8 +42,6 @@ EXPOSE 53/udp 53/tcp
 LABEL io.projectatomic.nulecule.volume.data="/named,128Mi"
 VOLUME [ "/named" ]
 
-USER 25
-
 # start services:
 ENTRYPOINT [ "/entrypoint"]
 CMD [ "/usr/sbin/named" ]

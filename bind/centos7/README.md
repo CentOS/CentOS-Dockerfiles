@@ -28,7 +28,7 @@ Clone Dockerfile somewhere and build the container:
 
 And now run the container:
 
-    $ sudo docker run --daemon --name bind --publish 54:54/udp --volume /srv/docker/bind9:/named bind
+    $ sudo docker run --detach --name bind --publish 54:54/udp --volume /srv/docker/bind9:/named bind
 
 
 In above examples params means:
