@@ -1,1 +1,0 @@
-bindadm ALL=NOPASSWD: /usr/sbin/rndc reload
