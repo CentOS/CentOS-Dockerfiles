@@ -19,6 +19,7 @@ RUN ./fix-permissions.sh /var/lib/mysql/   && \
     ./fix-permissions.sh /var/log/mariadb/ && \
     ./fix-permissions.sh /var/run/
 
+RUN mkdir /docker-entrypoint-initdb.d
 COPY docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
