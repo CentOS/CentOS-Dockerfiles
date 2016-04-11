@@ -7,11 +7,11 @@ To build:
 
 Copy the sources down -
 
-	# docker build -rm -t <username>/centos/redis-28-centos7 .
+	# docker build -rm -t <username>/redis-28-centos7 .
 
 To run:
 
-	# docker run -d -p 6379:6379 -e MASTER=true <username>/centos/redis-28-centos7
+	# docker run -d -p 6379:6379 -e MASTER=true <username>/redis-28-centos7
 
 To test:
 
