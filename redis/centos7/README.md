@@ -11,9 +11,8 @@ Copy the sources down -
 
 To run:
 
-	# docker run -d -p 6379:6379 <username>/redis:centos7
+	# docker run -d -p 6379:6379 -e MASTER=true <username>/redis:centos7
 
 To test:
 
 	# nc localhost 6379
-
