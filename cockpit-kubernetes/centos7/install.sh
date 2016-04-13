@@ -2,11 +2,6 @@
 
 set -ex
 
-# Install packages without dependencies
-if [ -z "$VERSION" ] && [ -z "$OFFLINE" ]; then
-    eval $(/container/scripts/get-version-env.sh)
-fi
-
 yum install cockpit-shell cockpit-ws cockpit-kubernetes -y;
 
 # Remove unwanted packages
