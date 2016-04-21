@@ -1,7 +1,8 @@
 FROM centos:7
 
 ARG RELEASE=1
-ARG VERSION=0.101
+ARG VERSION=0.103
+ARG OFFLINE
 
 ADD . /container
 RUN /container/install.sh

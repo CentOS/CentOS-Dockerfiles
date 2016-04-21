@@ -2,7 +2,7 @@
 
 set -ex
 
-yum install cockpit-shell cockpit-ws cockpit-kubernetes -y;
+yum install -y cockpit-shell cockpit-ws cockpit-kubernetes ;
 
 # Remove unwanted packages
 rm -rf /usr/share/cockpit/realmd/ /usr/share/cockpit/system/ /usr/share/cockpit/tuned/ /usr/share/cockpit/users/ /usr/share/cockpit/dashboard/
