@@ -1,6 +1,10 @@
 Kubernetes Container
 ====================
 
+Note : This is a modifed version of cockpit/kubernetes (https://github.com/cockpituous/cockpit/tree/master/containers/kubernetes)
+       The original cockpit/kubernetes was built on fedora and this one is modified to run on centos7.
+
+
 This container provides a version of cockpit that only contains the Kubernetes UI. Unlike a standard Cockpit installation, Cockpit does not have access to and will not interact with the underlying host. This container is meant to be deployed as a service with either Kubernetes or OpenShift.
 
 The Kubernetes API endpoint is discovered by looking at the `KUBERNETES_SERVICE_HOST` and `KUBERNETES_SERVICE_PORT` environment variables that Kubernetes will set via the Downwards API. If those values are not present authentication will always fail.
