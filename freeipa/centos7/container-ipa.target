@@ -1,0 +1,6 @@
+[Unit]
+Description=Minimal target for containerized FreeIPA server
+DefaultDependencies=false
+AllowIsolate=yes
+Requires=systemd-tmpfiles-setup.service systemd-journald.service dbus.service
+After=systemd-tmpfiles-setup.service systemd-journald.service dbus.service

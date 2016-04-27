@@ -1,0 +1,142 @@
+#!/bin/bash
+
+# Copyright 2015--2016 Jan Pazdziora
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Initialization of /data (bind-mounted volume) from /data-template
+# we IPA server was not yet configured.
+
+set -e
+
+cd /
+
+if ls -dZ /sys/fs/cgroup | grep -q :svirt_sandbox_file_t: ; then
+	echo "Invocation error: use -v /sys/fs/cgroup:/sys/fs/cgroup:ro parameter to docker run." >&2
+	exit 9
+fi
+
+DATA=/data
+DATA_TEMPLATE=/data-template
+
+if ! [ -f /etc/ipa/ca.crt ] ; then
+	( cd $DATA_TEMPLATE && tar cf - . ) | ( cd $DATA && tar xf - )
+	if [ -n "$PASSWORD" ] || [ -n "$IPA_SERVER_INSTALL_OPTS" ] ; then
+		touch $DATA/ipa-server-install-options
+		chmod 600 $DATA/ipa-server-install-options
+		if [ -n "$PASSWORD" ] ; then
+			echo "--admin-password='$PASSWORD'" >> $DATA/ipa-server-install-options
+			if ! grep -q '^--ds-password' $DATA/ipa-server-install-options ; then
+				echo "--ds-password='$PASSWORD'" >> $DATA/ipa-server-install-options
+			fi
+		fi
+		if [ -n "$IPA_SERVER_INSTALL_OPTS" ] ; then
+			echo "$IPA_SERVER_INSTALL_OPTS" >> $DATA/ipa-server-install-options
+		fi
+	fi
+fi
+if [ -f "$DATA/volume-version" ] ; then
+	DATA_VERSION=$(cat $DATA/volume-version)
+	IMAGE_VERSION=$(cat /etc/volume-version)
+	if ! [ "$DATA_VERSION" == "$IMAGE_VERSION" ] ; then
+		if [ -x /usr/sbin/ipa-volume-upgrade-$DATA_VERSION-$IMAGE_VERSION ] ; then
+			echo "Migrating $DATA data volume version $DATA_VERSION to $IMAGE_VERSION."
+			if /usr/sbin/ipa-volume-upgrade-$DATA_VERSION-$IMAGE_VERSION ; then
+				cat /etc/volume-version > $DATA/volume-version
+			else
+				echo "Migration of $DATA volume to version $IMAGE_VERSION failed."
+				exit 13
+			fi
+		fi
+	fi
+fi
+if [ -f "$DATA/build-id" ] ; then
+	if ! cmp -s $DATA/build-id $DATA_TEMPLATE/build-id ; then
+		echo "FreeIPA server is already configured but with different version, volume update."
+		( cd $DATA_TEMPLATE && find * | while read f ; do
+			if [ -d "$DATA_TEMPLATE/$f" ] && [ -f "$DATA/$f" ] ; then
+				echo "Removing file $DATA/$f, replacing with directory from $DATA_TEMPLATE."
+				rm -f "$DATA/$f"
+			fi
+			if ! [ -e $DATA/$f ] ; then
+				tar cf - $f | ( cd $DATA && tar xf - )
+			fi
+			done
+		)
+		sha256sum -c /etc/volume-data-autoupdate 2> /dev/null | awk -F': ' '/OK$/ { print $1 }' \
+			| while read f ; do
+				rm -f "$DATA/$f"
+				if [ -e "$DATA_TEMPLATE/$f" ] ; then
+					( cd $DATA_TEMPLATE && tar cf - "./$f" ) | ( cd $DATA && tar xvf - )
+				fi
+			done
+		cat /etc/volume-data-list | while read i ; do
+			if [ -e $DATA_TEMPLATE$i -a -e $DATA$i ] ; then
+				chown --reference=$DATA_TEMPLATE$i $DATA$i
+				chmod --reference=$DATA_TEMPLATE$i $DATA$i
+			fi
+		done
+	fi
+	if [ -f /etc/ipa/ca.crt ] ; then
+		rm -f "$DATA/etc/systemd/system/multi-user.target.wants/ipa-server-configure-first.service"
+	fi
+fi
+
+echo "$(date) $0 $@" >> /var/log/ipa-server-configure-first.log
+
+# Workaround 1285805
+if ! [ -s /etc/machine-id ] ; then
+	uuidgen | sed 's/-//g' > /etc/machine-id
+fi
+
+for i in /run/* /tmp/* ; do
+	if [ "$i" == '/run/lock' ] || [ "$i" == '/run/secrets' ] ; then
+		:
+	else
+		rm -rf "$i"
+	fi
+done
+
+SHOW_LOG=0
+if [ -t 1 ] ; then
+	SHOW_LOG=1
+elif [ "$1" == '--show-log' ] ; then
+	shift
+	SHOW_LOG=1
+fi
+if [ $SHOW_LOG == 1 ] ; then
+	for i in /var/log/ipa-server-configure-first.log /var/log/ipa-server-run.log ; do
+		if ! [ -f $i ] ; then
+			touch $i
+		fi
+	done
+	(
+	trap '' SIGHUP SIGTERM
+	tail --silent -n 0 -f --retry /var/log/ipa-server-configure-first.log /var/log/ipa-server-run.log 2> /dev/null < /dev/null &
+	)
+fi
+
+mkdir -p /run/ipa
+if [ "$1" == 'exit-on-finished' ] ; then
+	touch /run/ipa/$1
+else
+	touch /run/ipa/exit-on-error
+fi
+
+if [ -n "$IPA_SERVER_IP" ] ; then
+	echo "$IPA_SERVER_IP" > /run/ipa/ipa-server-ip
+fi
+
+exec /usr/sbin/init --show-status=false
+
+exit 10

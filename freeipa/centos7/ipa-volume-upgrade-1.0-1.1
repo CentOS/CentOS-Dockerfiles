@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+if ! [ -e /etc/systemd/system/container-ipa.target.wants ] ; then
+	mkdir -pv /etc/systemd/system/container-ipa.target.wants
+	mv -v /etc/systemd/system/multi-user.target.wants/* /etc/systemd/system/container-ipa.target.wants
+	rm -rf /etc/systemd/system/multi-user.target.wants
+	ln -vs /etc/systemd/system/container-ipa.target.wants /etc/systemd/system/multi-user.target.wants
+fi
+
+rm -f /etc/systemd/system/default.target
+ln -s /usr/lib/systemd/system/container-ipa.target /etc/systemd/system/default.target
+
