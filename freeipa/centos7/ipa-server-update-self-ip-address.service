@@ -1,0 +1,12 @@
+[Unit]
+Description=Update self IP address of the IPA server
+Requires=ipa-server-upgrade.service
+After=ipa.service
+After=ipa-server-upgrade.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/ipa-server-configure-first update-self-ip-address
+
+[Install]
+WantedBy=container-ipa.target

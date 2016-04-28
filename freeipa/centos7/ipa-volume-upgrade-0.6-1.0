@@ -1,0 +1,12 @@
+#!/bin/bash
+
+rm -rf /etc/systemd/system/*
+( cd /data-template/etc/systemd/system/ && cp -rp . /etc/systemd/system/ )
+( cd /data/etc/systemctl-lite-enabled && for i in * ; do systemctl enable $i ; done )
+ln -s /lib/systemd/system/pki-tomcatd@.service /etc/systemd/system/pki-tomcatd.target.wants/pki-tomcatd@pki-tomcat.service
+
+systemctl disable ipa-server-configure-first.service || rm -f /etc/systemd/system/multi-user.target.wants/ipa-server-configure-first.service
+systemctl enable ipa-server-upgrade.service
+systemctl enable ipa-server-update-self-ip-address.service
+
+python -c "from ipaserver.install import sysupgrade; sysupgrade.set_upgrade_state('dns', 'regular_named_masked', True);"

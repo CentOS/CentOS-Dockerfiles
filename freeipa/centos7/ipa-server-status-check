@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -s /run/ipa/exit_code ] ; then
+	exit_code=$( cat /run/ipa/exit_code )
+	if [ -e /run/ipa/exit-on-finished ] || ! [ "$exit_code" == 0 ] ; then
+		systemctl poweroff
+	fi
+fi
+exit
