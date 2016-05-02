@@ -1,0 +1,4 @@
+#!/bin/bash
+
+exit_code=$( cat /run/ipa/exit_code )
+exit $exit_code

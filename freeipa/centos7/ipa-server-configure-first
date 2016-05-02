@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2014 Jan Pazdziora
+# Copyright 2014--2016 Jan Pazdziora
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,52 +14,167 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function usage () {
-	if [ -n "$1" ] ; then
-		echo $1 >&2
-	else
-		echo "Start as docker run -h \$FQDN_HOSTNAME -e PASSWORD=\$THE_ADMIN_PASSWORD image" >&2
-	fi
-	exit 1
+mark_exit_code () {
+	exit_code=$?
+	echo $exit_code > /run/ipa/exit_code
+	exit $exit_code
 }
+mkdir -p /run/ipa
+trap mark_exit_code ERR EXIT
 
-function stop_running () {
-	systemctl stop-running
-}
-trap stop_running TERM
+set -e
 
-systemd-tmpfiles --remove --create 2>&1 | grep -v 'Failed to replace specifiers'
-
-rm -f /etc/systemctl-lite/running/*
-
-CAN_EDIT_RESOLV_CONF=0
-cp -f /etc/resolv.conf /etc/resolv.conf.docker
-if echo '# test access' >> /etc/resolv.conf || umount /etc/resolv.conf 2> /dev/null ; then
-	CAN_EDIT_RESOLV_CONF=1
-	cp -f /etc/resolv.conf.docker /etc/resolv.conf
-fi
-
-if [ -f /etc/ipa/ca.crt ] ; then
-	echo "FreeIPA server is already configured, starting the services."
-	if [ "$CAN_EDIT_RESOLV_CONF" == "1" ] ; then
-		if [ -f /etc/resolv.conf.ipa ] ; then
-			perl -pe 's/^(nameserver).*/$1 127.0.0.1/' /etc/resolv.conf.ipa > /etc/resolv.conf
-		fi
+function update_server_ip_address () {
+	CURRENT_RECORD=$( host -t A $HOSTNAME_FQDN )
+	MY_IP=''
+	if [ -f /run/ipa/ipa-server-ip ] ; then
+		MY_IP=$( cat /run/ipa/ipa-server-ip )
 	fi
-	systemctl start-enabled
+	MY_IP=${MY_IP:-$( /sbin/ip addr show | awk '/inet .*global/ { split($2,a,"/"); print a[1]; }' | head -1 )}
+	if [ "$CURRENT_RECORD" == "$HOSTNAME_FQDN has address $MY_IP" ] ; then
+		return
+	fi
+
 	kdestroy -A
 	kinit -k
 	(
 		echo "server 127.0.0.1"
-		echo "update delete $( hostname -f ) A"
-		MY_IP=$( /sbin/ip addr show | awk '/inet .*global/ { split($2,a,"/"); print a[1]; }' | head -1 )
-		echo "update add $( hostname -f ) 180 A $MY_IP"
+		echo "update delete $HOSTNAME_FQDN A"
+		echo "update add $HOSTNAME_FQDN 180 A $MY_IP"
 		echo "send"
 		echo "quit"
 	) | nsupdate -g
 	kdestroy -A
+
+	while true ; do
+		NEW_RECORD=$( host -t A $HOSTNAME_FQDN )
+		if [ "$?" -eq 0 ] && [ -n "$NEW_RECORD" ] && ! [ "$NEW_RECORD" == "$CURRENT_RECORD" ] ; then
+			return
+		fi
+		sleep 1
+	done
+}
+
+if [ "$1" == update-self-ip-address ] ; then
+	exec >> /var/log/ipa-server-run.log 2>&1
+	echo "$(date) $0 $@"
+
+	# Wait until DNS is up and running and resolving
+	HOSTNAME_FQDN=$( hostname -f )
+	while ! host -t A $HOSTNAME_FQDN > /dev/null ; do
+		sleep 1
+	done
+	update_server_ip_address
+	host $HOSTNAME_FQDN
 	echo "FreeIPA server started."
+	exit
+fi
+
+exec >> /var/log/ipa-server-configure-first.log 2>&1
+
+echo "$(date) $0 $@"
+
+function upgrade_server () {
+	systemctl stop dirsrv.target
+	/usr/sbin/setup-ds.pl -u -s General.UpdateMode=offline
+	for i in 389-ds-base pki-server ; do
+		rpm -q --scripts $i | perl -lne '/^\S+ scriptlet/ and $x = 0; print if $x; if (/^postinstall scriptlet \(using (\S+)\)/) { $x = 1; print "#!$1"; if ($1 eq "/bin/sh") { print "set -x" } }' > /tmp/$i.script
+		if [ -s "/tmp/$i.script" ] ; then
+			sed -i '\|/sbin/ldconfig|d' /tmp/$i.script
+			chmod a+x /tmp/$i.script
+			/tmp/$i.script 2
+		fi
+	done
+	# workaround https://fedorahosted.org/freeipa/ticket/5113
+	systemctl start dirsrv.target
+	systemctl start certmonger.service
+	if [ -f /var/lib/ipa/sysupgrade/sysupgrade.state ] ; then
+		PLATFORM=$(python -c 'import ipaplatform; print ipaplatform.NAME;')
+		sed -i "s/platform.*/platform = $PLATFORM/" /var/lib/ipa/sysupgrade/sysupgrade.state
+	fi
+	ipa-server-upgrade
+	for c in /etc/systemctl-lite-enabled/*-domainname.service ; do
+		base_c=$(basename $c)
+		for i in /usr/lib/systemd/system/*-domainname.service ; do
+			base_i=$(basename $i)
+			if [ -e "$c" ] && [ -e "$i" ] && [ "$base_c" != "$base_i" ] ; then
+				echo "Renaming $c to $base_i"
+				mv $c "$(dirname $c)/$base_i"
+			fi
+		done
+	done
+	mv /data/build-id /data/build-id-upgraded-$( date +'%Y%m%d-%H%M%S' )
+	cp -f /data-template/build-id /data/build-id
+}
+
+if [ "$1" == upgrade ] ; then
+	if ! diff /data/volume-version /etc/volume-version ; then
+		echo "The /data volume was created using incompatible image." >&2
+		exit 2
+	fi
+	if [ -f /data/etc/resolv.conf.ipa ] ; then
+		perl -pe 's/^(nameserver).*/$1 127.0.0.1/' /data/etc/resolv.conf.ipa > /etc/resolv.conf
+	fi
+	# Removing kdcinfo.* which is likely to hold old IP address
+	rm -rf /var/lib/sss/pubconf/kdcinfo.*
+	if cmp /data/build-id /data-template/build-id ; then
+		echo "FreeIPA server is already configured, starting the services."
+	else
+		echo "FreeIPA server is already configured but with different version, starting upgrade."
+		for d in /usr/share/java/resteasy* ; do
+			sed -i 's#^\(JAVA_OPTS=".*-DRESTEASY_LIB=\)/usr/share/java/resteasy[a-z-]*\(.*"\)#\1'$d'\2#' /etc/sysconfig/pki-tomcat
+		done
+		upgrade_server
+		echo "FreeIPA server upgraded."
+	fi
+	exit
+fi
+
+set -e
+
+cd /
+
+function usage () {
+	if [ -n "$1" ] ; then
+		echo $1 >&2
+	else
+		echo "Start as docker run -h \$FQDN_HOSTNAME -e PASSWORD=\$THE_ADMIN_PASSWORD -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /path:/data:Z image" >&2
+	fi
+	exit 1
+}
+
+if [ -f /etc/ipa/ca.crt ] ; then
+	echo "The FreeIPA server was already configured." >&2
+	exit 11
 else
+	REPLICA=false
+	if [ -f /data/ipa-replica-install-options ] ; then
+		if [ -f /data/ipa-server-install-options ] ; then
+			usage "Too many install options files."
+		fi
+		REPLICA=true
+		if [ $(ls /data/ | grep  \\.gpg$ | wc -l) -gt 1 ] ; then
+			usage "Too many .gpg files"
+		fi
+		if [ ! -f /data/*.gpg ] ; then
+			usage "Cannot create an IPA replica without .gpg file"
+		fi
+		RUN_CMD="/usr/sbin/ipa-replica-install /data/*.gpg"
+	else
+		if [ ! -f /data/ipa-server-install-options ] && [ -z "$PASSWORD" ] ; then
+			usage
+		fi
+		RUN_CMD="/usr/sbin/ipa-server-install"
+	fi
+
+	(
+		cd /data
+		grep '/$' /etc/volume-data-list | sed 's!^!.!' | xargs mkdir -p
+		grep -v '/$' /etc/volume-data-list | xargs dirname | sed 's!^!.!' | xargs mkdir -p
+		grep -v '/$' /etc/volume-data-list | sed 's!^!.!' | xargs touch
+	)
+	xargs rm -f < /etc/volume-data-mv-list
+
 	HOSTNAME_FQDN=$( hostname -f )
 	HOSTNAME_SHORT=${HOSTNAME_FQDN%%.*}
 	DOMAIN=${HOSTNAME_FQDN#*.}
@@ -67,45 +182,65 @@ else
 		usage
 	fi
 
-	if [ -z "$PASSWORD" ] ; then
-		usage
-	fi
-
 	REALM=${DOMAIN^^}
 
-	DEBUG_OPT=
-	if [ -n "$DEBUG" ] ; then
-		DEBUG_OPT=-d
+	if [ -f /data/ipa-server-install-options ] && ! grep -Eq '^--forwarder=|^--no-forwarders' /data/ipa-server-install-options ; then
+		if [ -z "$FORWARDER" ] ; then
+			FORWARDER=$( awk '$1 == "nameserver" { print $2; exit }' /etc/resolv.conf )
+		fi
+		if [ "$FORWARDER" == '127.0.0.1' ] ; then
+			FORWARDER=--no-forwarders
+		else
+			FORWARDER=--forwarder=$FORWARDER
+		fi
 	fi
 
-	if [ -z "$FORWARDER" ] ; then
-		FORWARDER=$( awk '$1 == "nameserver" { print $2; exit }' /etc/resolv.conf )
-	fi
-	if [ "$FORWARDER" == '127.0.0.1' ] ; then
-		FORWARDER=--no-forwarders
-	else
-		FORWARDER=--forwarder=$FORWARDER
-	fi
-
-	if [ "$CAN_EDIT_RESOLV_CONF" == "0" ] ; then
-		find /usr -name bindinstance.py | xargs sed -i '/changing resolv.conf to point to ourselves/s/^/#/'
-	fi
-
-	if /usr/sbin/ipa-server-install -r $REALM -p $PASSWORD -a $PASSWORD -U $DEBUG_OPT --setup-dns $FORWARDER < /dev/null ; then
-		cp -f /etc/resolv.conf /etc/resolv.conf.ipa
+	if ( if [ -n "$PASSWORD" ] ; then
+			if $REPLICA ; then
+				echo "--password=$PASSWORD"
+			else
+				echo "--ds-password=$PASSWORD"
+			fi
+			echo "--admin-password=$PASSWORD"
+		fi
+		if [ -n "$DEBUG" ] ; then
+			echo "--debug"
+		fi
+		if $REPLICA ; then
+			cat /data/ipa-replica-install-options
+			echo "--skip-conncheck"
+		else
+			if [ -f /data/ipa-server-install-options ] ; then
+				cat /data/ipa-server-install-options
+			fi
+			grep -q '^--realm=' /data/ipa-server-install-options || \
+			    echo "-r $REALM"
+		fi
+		echo "--setup-dns $FORWARDER"
+		) | xargs $RUN_CMD -U $IPA_SERVER_INSTALL_OPTS ; then
+		sed -i 's/default_ccache_name/# default_ccache_name/' /data/etc/krb5.conf
+		cp -f /etc/resolv.conf /data/etc/resolv.conf.ipa
+		cat /etc/volume-data-mv-list | while read i ; do
+			rm -rf /data$i
+			if [ -e $i ] ; then
+				mv $i /data$i
+				ln -sf /data$i $i
+			fi
+		done
+		cp /etc/volume-version /data/volume-version
+		while ! host -t A $HOSTNAME_FQDN > /dev/null ; do
+			sleep 1
+		done
+		update_server_ip_address
+		systemctl enable ipa-server-update-self-ip-address.service
+		systemctl enable ipa-server-upgrade.service
+		systemctl disable ipa-server-configure-first.service || rm -f /etc/systemd/system/multi-user.target.wants/ipa-server-configure-first.service
 		echo "FreeIPA server configured."
 	else
 		ret=$?
-		echo "FreeIPA server configuration failed."
+		echo "FreeIPA server configuration failed." >&2
 		exit $ret
 	fi
 fi
 
-if perl -e '( -t ) ? exit 0 : exit 1' ; then
-	echo 'Starting interactive shell.'
-	/bin/bash
-else
-	echo 'Go loop.'
-	while true ; do sleep 1000 ; done
-fi
-
+exit

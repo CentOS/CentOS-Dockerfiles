@@ -3,6 +3,7 @@ FROM centos:centos7
 
 MAINTAINER Jan Pazdziora
 
+RUN cd /etc/yum.repos.d && curl -LO https://copr.fedorainfracloud.org/coprs/g/freeipa/freeipa-4-3-centos-7/repo/epel-7/pvoborni-freeipa-4-3-centos-7-epel-7.repo
 RUN mkdir -p /run/lock && yum install -y ipa-server ipa-server-dns bind bind-dyndb-ldap && yum clean all
 
 RUN echo '7fe9c3084d2b8ba846c23458be86c8677693f0eb /etc/tmpfiles.d/opendnssec.conf' | sha1sum --quiet -c && mv -v /etc/tmpfiles.d/opendnssec.conf /usr/lib/tmpfiles.d/opendnssec.conf
