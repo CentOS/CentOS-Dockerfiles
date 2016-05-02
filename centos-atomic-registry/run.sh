@@ -96,4 +96,4 @@ echo " * If a user wishes to push/pull images from/to repository, first login to
 echo "   ? > About, click to show token and then use it in docker login as "
 echo " ** docker login -u admin -p <THE REVEALED TOKEN> <hostname>:5000";
 echo " * Now depending on who you have logged in as, you should be able to push / pull images as ";
-echo " ** docker push localhost:5000/<PROJECT NAME>/<IMAGE NAME>";
+echo " ** docker push ${INSTALL_HOST}:5000/<PROJECT NAME>/<IMAGE NAME>";
