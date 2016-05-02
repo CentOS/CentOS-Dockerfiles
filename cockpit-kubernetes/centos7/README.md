@@ -1,9 +1,7 @@
+Modified from origional container : https://github.com/cockpituous/cockpit
+
 Kubernetes Container
 ====================
-
-Note : This is a modifed version of cockpit/kubernetes (https://github.com/cockpituous/cockpit/tree/master/containers/kubernetes)
-       The original cockpit/kubernetes was built on fedora and this one is modified to run on centos7.
-
 
 This container provides a version of cockpit that only contains the Kubernetes UI. Unlike a standard Cockpit installation, Cockpit does not have access to and will not interact with the underlying host. This container is meant to be deployed as a service with either Kubernetes or OpenShift.
 
