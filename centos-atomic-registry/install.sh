@@ -45,7 +45,7 @@ chmod +x /container/etc/origin/atomic-registry-initauth.sh
 echo "######################### IMPORTANT #####################################"
 echo "Optionally edit configuration file /etc/origin/master/master-config.yaml,"
 echo "add certificates to /etc/origin/master,"
-echo "then run 'atomic run mohammedzee1000/centos-atomic-registry ${INSTALL_HOST}'"
+echo "then run 'atomic run mohammedzee1000/centos-atomic-registry'"
 echo "######################## DEFAULT AUTHENTICATION #########################";
 echo "By default, two users are available admin/admin@123 pulluser@pulluser@123";
 echo "These users details are located at /etc/origin/master/users.htpasswd, edit";
