@@ -3,7 +3,7 @@ set -eo pipefail
 
 # if command starts with an option, prepend mysqld
 if [ "${1:0:1}" = '-' ]; then
-	set -- mysqld "$@"
+	set -- /usr/libexec/mysqld "$@"
 fi
 
 # skip setup if they want an option that stops mysqld
@@ -17,9 +17,9 @@ for arg; do
 	esac
 done
 
-if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
-	# Get config
-	DATADIR="$("$@" --verbose --help --log-bin-index=`mktemp -u` 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
+if [ "$1" = "$@" -a -z "$wantHelp" ]; then
+
+: "${DATADIR:="/var/lib/mysql"}"
 
 	if [ ! -d "$DATADIR/mysql" ]; then
 		if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
@@ -32,10 +32,10 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		chown -R mysql:mysql "$DATADIR"
 
 		echo 'Initializing database'
-		mysql_install_db --user=mysql --datadir="$DATADIR" --rpm
+		mysql_install_db --user=mysql --datadir="$DATADIR"
 		echo 'Database initialized'
 
-		"$@" --skip-networking &
+    "$@" --user=mysql --datadir="$DATADIR" --skip-networking &
 		pid="$!"
 
 		mysql=( mysql --protocol=socket -uroot )

@@ -14,11 +14,6 @@ RUN yum install mysql-server -y \
 
 VOLUME /var/lib/mysql
 
-ADD ./config_mysql.sh /config_mysql.sh
-
-RUN chmod 755 /config_mysql.sh
-RUN /config_mysql.sh
-
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN mkdir /docker-entrypoint-initdb.d \
  && chmod +x /entrypoint.sh
@@ -27,4 +22,4 @@ EXPOSE 3306
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["mysqld_safe"]
+CMD ["/usr/libexec/mysqld"]
