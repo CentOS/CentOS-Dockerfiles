@@ -8,9 +8,9 @@ FROM centos:centos6
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 
-RUN yum -y update; yum clean all
-RUN yum -y install epel-release; yum clean all
-RUN yum -y install mysql-server mysql pwgen bash-completion psmisc net-tools; yum clean all
+RUN yum update -y && yum clean all
+RUN yum install mysql-server -y \
+ && yum clean all
 
 ADD ./config_mysql.sh /config_mysql.sh
 
