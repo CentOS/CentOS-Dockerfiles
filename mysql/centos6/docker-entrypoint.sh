@@ -58,8 +58,8 @@ if [ "$1" = "$@" -a -z "$wantHelp" ]; then
 		fi
 
 		if [ ! -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
-			MYSQL_ROOT_PASSWORD="$(pwgen -1 32)"
-			echo "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
+			MYSQL_ROOT_PASSWORD="$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | xargs)"
+			echo -e "\e[31mGENERATED ROOT PASSWORD:\e[0m \e[92m$MYSQL_ROOT_PASSWORD\e[0m"
 		fi
 		"${mysql[@]}" <<-EOSQL
 			-- What's done in this file shouldn't be replicated
