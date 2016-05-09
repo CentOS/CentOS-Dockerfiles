@@ -12,6 +12,8 @@ RUN yum update -y && yum clean all
 RUN yum install mysql-server -y \
  && yum clean all
 
+VOLUME /var/lib/mysql
+
 ADD ./config_mysql.sh /config_mysql.sh
 
 RUN chmod 755 /config_mysql.sh
