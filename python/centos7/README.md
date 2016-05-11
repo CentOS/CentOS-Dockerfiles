@@ -1,7 +1,7 @@
 dockerfiles-centos-python
 =========================
 
-CentOS 6 dockerfile for python
+CentOS 7 dockerfile for python
 
 Get Docker version
 
