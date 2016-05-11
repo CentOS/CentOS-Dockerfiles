@@ -1,0 +1,5 @@
+/etc/krb5.keytab
+/etc/named.keytab
+/etc/pki/pki-tomcat
+/root/cacert.p12
+/usr/share/ipa/html/kerberosauth.xpi
