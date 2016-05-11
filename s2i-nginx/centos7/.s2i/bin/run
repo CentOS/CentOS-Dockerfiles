@@ -1,0 +1,10 @@
+#!/bin/bash -e
+#
+# S2I run script for the 's2i-nginx' image.
+# The run script executes the server that runs your application.
+#
+# For more information see the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+NGINX_CONF=${NGINX_CONF-/opt/app-root/etc/nginx.conf}
+exec ${NGINX_BASE_DIR}/usr/sbin/nginx -c "$NGINX_CONF"

@@ -1,0 +1,79 @@
+#!/bin/bash -e
+#
+# S2I assemble script for the 's2i-nginx' image.
+# The 'assemble' script builds your application source ready to run.
+#
+# For more information refer to the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+if [ "$1" = "-h" ]; then
+	# If the 's2i-nginx' assemble script is executed with '-h' flag,
+	# print the usage.
+	exec ${S2I_SCRIPTS_PATH}/usage
+fi
+
+NGINX_STATIC_DIR=${NGINX_STATIC_DIR-html}
+NGINX_CONF_FILE=${NGINX_CONF_FILE-}
+NGINX_CONF_DIR=${NGINX_CONF_DIR-conf.d}
+NGINX_AUX_DIR=${NGINX_AUX_DIR-aux}
+
+copy_static_files() {
+    echo "---> Copying static files"
+    if [ -d /tmp/src/"${NGINX_STATIC_DIR}" ]; then
+        cp -Rf /tmp/src/"${NGINX_STATIC_DIR}"/. ./html
+    else
+        cp -Rf /tmp/src/. ./html
+    fi
+}
+
+copy_default_config() {
+    cp /opt/app-root/etc/nginx.server.sample.conf /opt/app-root/etc/nginx.conf.d/default.conf
+}
+
+copy_server_configs() {
+    echo "---> Copying nginx config"
+    rm /opt/app-root/etc/nginx.conf.d/default.conf
+    if [ ! -d /tmp/src/"${NGINX_STATIC_DIR}" ]; then
+        copy_default_config
+    elif [ -n "${NGINX_SERVER_CONF_FILE}" -a -f /tmp/src/"${NGINX_SERVER_CONF_FILE}" ]; then
+        cp /tmp/src/"${NGINX_SERVER_CONF_FILE}" /opt/app-root/etc/nginx.conf.d
+    elif [ -n "${NGINX_CONF_DIR}" -a -d /tmp/src/"${NGINX_CONF_DIR}" ]; then
+        cp -Rf /tmp/src/"${NGINX_CONF_DIR}"/. /opt/app-root/etc/nginx.conf.d
+    else
+        copy_default_config
+    fi
+}
+
+copy_aux_dir() {
+    if [ -d /tmp/src/"${NGINX_AUX_DIR}" ]; then
+        echo "---> Copying auxiliary files"
+        mkdir /opt/app-root/etc/aux
+        cp -Rf /tmp/src/"${NGINX_AUX_DIR}"/. /opt/app-root/etc/aux
+    fi
+}
+
+test_config() {
+    echo "---> testing config"
+    if ! $NGINX_BASE_DIR/usr/sbin/nginx -c /opt/app-root/etc/nginx.conf -t ; then
+        echo "nginx configuration not valid."
+        echo
+        for f in /opt/app-root/etc/nginx.conf.d/*; do
+            echo "==> $f <=="
+            cat $f
+        done
+        exit 1
+    fi
+}
+
+cleanup() {
+    echo "---> cleanup"
+    rm -f /opt/app-root/run/nginx.pid $NGINX_VAR_DIR/log/nginx/error.log
+}
+
+copy_static_files
+copy_server_configs
+copy_aux_dir
+
+test_config
+cleanup
