@@ -1,3 +1,5 @@
+#!/bin/bash
+
 buildurl="mohammedzee1000/centos-cockpit-kubernetes";
 sudo setenforce 0;
 echo "Building as ${buildurl}";
