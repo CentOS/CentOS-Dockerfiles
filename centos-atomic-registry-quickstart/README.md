@@ -7,6 +7,7 @@ http://projectatomic.io/registry
 - single host (laptop, vm, vagrant, etc.) with Docker
 - Open TCP ports 8443, 443, 5000
 - The hostname used during install will be the output of the `hostname` command. If that hostname does not resolve with DNS then pass the IP address to the install procedure.
+- (optional) Storage at /var/lib/origin/volumes (Read Last section for more information.
 - (optional) atomic cli, available on Red Hat-based systems Fedora, Centos, Red Hat Enterprise Linux, including Atomic host
 
 ## Install and Run
