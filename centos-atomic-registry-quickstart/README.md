@@ -17,17 +17,17 @@ The install procedure should be run locally.
 
 1. Install the system service files and pull images.
 
-        sudo atomic install projectatomic/atomic-registry-quickstart [hostname]
+        sudo atomic install projectatomic/centos-atomic-registry-quickstart [hostname]
 1. Optional: edit configuration file `/etc/origin/master/master-config.yaml`.
 1. Run the application. This will enable and start the docker containers as system services.
 
-        sudo atomic run projectatomic/centos-atomic-registry [hostname]
+        sudo atomic run projectatomic/centos-atomic-registry-quickstart [hostname]
 
 ### With straight Docker
 
 Replace steps 1 and 3 above with the output of the inspect command.
 
-    sudo docker inspect -f '{{ .Config.Labels.INSTALL }}' projectatomic/centos-atomic-registry
+    sudo docker inspect -f '{{ .Config.Labels.INSTALL }}' projectatomic/centos-atomic-registry-quickstart
     sudo docker inspect -f '{{ .Config.Labels.RUN }}' openshift/centos-atomic-registry
 
 This will provide the docker run commands to install and run the registry installation.
@@ -38,12 +38,12 @@ If you make changes to the API  configuration file `/etc/origin/master/master-co
 
 ## Try it out
 
-1. Explore the web UI on https://<hostname>
+1. Explore the web UI on https://<hostname> (Default login admin/admin@123)
 1. Login with docker using the reference commands, build and push an image.
 
 ## Uninstall
 
-    sudo atomic uninstall --force projectatomic/atomic-registry-quickstart
+    sudo atomic uninstall --force projectatomic/centos-atomic-registry-quickstart
 
 # Optional Setup steps
 
