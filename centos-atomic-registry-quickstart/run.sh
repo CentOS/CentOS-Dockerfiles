@@ -78,7 +78,7 @@ echo "Updating default project configuration"
 set -x
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-shared.json
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-unshared.json
-$CMD oc policy add-role-to-group registry:viewer system:unauthenticated
+$CMD oc policy add-role-to-group registry-viewer system:unauthenticated
 sed -i 's/  projectRequestTemplate:.*$/  projectRequestTemplate: "default\/registry-newproject-template-shared"/' /etc/origin/master/master-config.yaml
 
 set +x
