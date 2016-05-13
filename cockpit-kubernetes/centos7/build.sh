@@ -1,4 +1,6 @@
 buildurl="mohammedzee1000/centos-cockpit-kubernetes";
-
-docker build -t ${buildurl} .
-docker push ${buildurl}
+sudo setenforce 0;
+echo "Building as ${buildurl}";
+docker build -t ${buildurl} .;
+docker push ${buildurl};
+sudo setenforce 1;
