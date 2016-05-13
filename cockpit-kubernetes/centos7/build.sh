@@ -1,4 +1,4 @@
 buildurl="mohammedzee1000/centos-cockpit-kubernetes";
 
 docker build -t ${buildurl} .
-docker push ${buildurl}
+docker puswh ${buildurl}
