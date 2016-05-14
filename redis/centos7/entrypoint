@@ -39,7 +39,7 @@ function launchsentinel() {
     sleep 10
   done
 
-  sentinel_conf=sentinel.conf
+  sentinel_conf=/tmp/sentinel.conf
 
   echo "sentinel monitor mymaster ${master} 6379 2" > ${sentinel_conf}
   echo "sentinel down-after-milliseconds mymaster 60000" >> ${sentinel_conf}
@@ -66,9 +66,11 @@ function launchslave() {
     echo "Connecting to master failed.  Waiting..."
     sleep 10
   done
-  perl -pi -e "s/%master-ip%/${master}/" /redis-slave/redis.conf
-  perl -pi -e "s/%master-port%/6379/" /redis-slave/redis.conf
-  redis-server /redis-slave/redis.conf
+  # FIXME we dont need no perl for that, wont we?!
+  cp /redis-slave/redis.conf /tmp
+  perl -pi -e "s/%master-ip%/${master}/" /tmp/redis.conf
+  perl -pi -e "s/%master-port%/6379/" /tmp/redis.conf
+  redis-server /tmp/redis.conf
 }
 
 if [[ "${MASTER}" == "true" ]]; then

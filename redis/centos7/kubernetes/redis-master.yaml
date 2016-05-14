@@ -9,20 +9,17 @@ metadata:
 spec:
   containers:
     - name: master
-      image: centos/redis-28-centos7
+      image: goern/redis-28-centos7
       env:
         - name: MASTER
           value: "true"
       ports:
         - containerPort: 6379
-      resources:
-        limits:
-          cpu: "0.1"
       volumeMounts:
         - mountPath: /redis-master-data
           name: data
     - name: sentinel
-      image: centos/redis-28-centos7
+      image: goern/redis-28-centos7
       env:
         - name: SENTINEL
           value: "true"

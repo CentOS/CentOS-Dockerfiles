@@ -20,7 +20,7 @@ LABEL Name="centos/redis-28-centos7" \
 
 RUN yum -y --setopt=tsflags=nodocs update && \
     yum -y --setopt=tsflags=nodocs install epel-release && \
-    yum -y --setopt=tsflags=nodocs install redis && \
+    yum -y --setopt=tsflags=nodocs install redis perl && \
     yum clean all
 
 COPY redis-master.conf /redis-master/redis.conf

@@ -1,0 +1,22 @@
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: redis
+  labels:
+    name: master
+    role: service
+spec:
+  ports:
+    -
+      name: "redis"
+      protocol: "TCP"
+      port: 6379
+      targetPort: 6379
+      nodePort: 0
+  selector:
+    name: "redis"
+  portalIP: ""
+  type: "ClusterIP"
+  sessionAffinity: "None"
+status:
+  loadBalancer: {}

@@ -1,0 +1,99 @@
+---
+  kind: "Template"
+  apiVersion: "v1"
+  metadata:
+    name: "redis-cluster"
+    annotations:
+      description: "This is a redis cluster, having sentinels and masters."
+      tags: "instant-app,redis"
+      iconClass: "icon-redis"
+    labels:
+      template: "redis"
+  objects:
+    -
+      apiVersion: "v1"
+      kind: "Service"
+      metadata:
+        name: redis-sentinel
+        labels:
+          name: sentinel
+          role: service
+      spec:
+        ports:
+          -
+            port: 26379
+            targetPort: 26379
+        selector:
+          redis-sentinel: "true"
+    -
+      apiVersion: "v1"
+      kind: "Service"
+      metadata:
+        name: redis
+        labels:
+          name: master
+          role: service
+      spec:
+        ports:
+          -
+            name: "redis"
+            protocol: "TCP"
+            port: 6379
+            targetPort: 6379
+            nodePort: 0
+        selector:
+          name: "redis"
+        portalIP: ""
+        type: "ClusterIP"
+        sessionAffinity: "None"
+      status:
+        loadBalancer: {}
+    -
+      apiVersion: v1
+      kind: ReplicationController
+      metadata:
+        name: redis
+      spec:
+        replicas: 1
+        selector:
+          name: redis
+        template:
+          metadata:
+            labels:
+              name: redis
+          spec:
+            containers:
+            - name: redis
+              image: goern/redis-28-centos7
+              ports:
+              - containerPort: 6379
+              volumeMounts:
+              - mountPath: /redis-master-data
+                name: data
+            volumes:
+              - name: data
+                emptyDir: {}
+    -
+      apiVersion: v1
+      kind: ReplicationController
+      metadata:
+        name: redis-sentinel
+      spec:
+        replicas: 1
+        selector:
+          redis-sentinel: "true"
+        template:
+          metadata:
+            labels:
+              name: redis-sentinel
+              redis-sentinel: "true"
+              role: sentinel
+          spec:
+            containers:
+            - name: sentinel
+              image: goern/redis-28-centos7
+              env:
+                - name: SENTINEL
+                  value: "true"
+              ports:
+                - containerPort: 26379
