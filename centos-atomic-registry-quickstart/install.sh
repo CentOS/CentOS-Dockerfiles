@@ -7,8 +7,8 @@ do
   chroot /host docker pull $IMAGE
 done
 
-docker tag openshift/origin-pod:latest openshift/origin-pod:v1.2.0-rc1-3-g4a17672;
-docker tag openshift/origin-deployer openshift/origin-deployer:v1.2.0-rc1-3-g4a17672;
+chroot /host docker tag openshift/origin-pod:latest openshift/origin-pod:v1.2.0-rc1-3-g4a17672;
+chroot /host docker tag openshift/origin-deployer openshift/origin-deployer:v1.2.0-rc1-3-g4a17672;
 
 INSTALL_HOST=${1:-`hostname`}
 echo "Installing using hostname ${INSTALL_HOST}"
