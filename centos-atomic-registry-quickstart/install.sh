@@ -37,6 +37,7 @@ echo "Updating servicesNodePortRange to 443-32767..."
 sed -i 's/  servicesNodePortRange:.*$/  servicesNodePortRange: 443-32767/' /etc/origin/master/master-config.yaml
 echo "Updating login template"
 sed -i 's/  templates: null$/  templates:\n    login: site\/registry-login-template.html/' /etc/origin/master/master-config.yaml
+#sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"default\/\"/g"
 
 cp /container/etc/origin/users.htpasswd /host/etc/origin/master/.
 chmod +x /container/etc/origin/atomic-registry-initauth.sh
