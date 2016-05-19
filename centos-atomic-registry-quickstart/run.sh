@@ -79,6 +79,7 @@ set -x
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-shared.json
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-unshared.json
 $CMD oc policy add-role-to-group registry-viewer system:unauthenticated
+$CMD oadm policy add-role-to-user cluster-admin admin
 sudo sed -i 's/  projectRequestTemplate:.*$/  projectRequestTemplate: "default\/registry-newproject-template-shared"/' /etc/origin/master/master-config.yaml;
 #sudo sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"default\/registry-newproject-template-shared\"/g" /etc/origin/master/master-config.yaml;
 
