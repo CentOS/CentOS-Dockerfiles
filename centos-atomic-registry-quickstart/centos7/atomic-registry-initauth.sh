@@ -32,6 +32,7 @@ EOF
 # * Update the config file with new auth information
 sed -i "/\s\sidentityProviders\:/{n;N;N;N;N;N;N;d}" $tmpyml;
 sed -i "/\s\sidentityProviders\:/r $injectfile" $tmpyml &> /dev/null;
+#sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"test\"/g" $tmpyml
 
 # * Writeback to orignal config file and remove temp files.
 cat $tmpyml > $ymlfile;
