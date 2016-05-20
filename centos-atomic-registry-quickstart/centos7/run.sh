@@ -34,7 +34,7 @@ INSTALL_HOST=${1:-`hostname`}
 
 echo "Running using hostname ${INSTALL_HOST}"
 
-chroot /host sudo docker run -d --name "origin" \
+chroot /host docker run -d --name "origin" \
         --privileged --pid=host --net=host \
         -e KUBECONFIG=/etc/origin/master/admin.kubeconfig \
         -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys -v /var/lib/docker:/var/lib/docker:rw \
@@ -47,7 +47,7 @@ chroot /host sudo docker run -d --name "origin" \
 echo "Waiting for services to come up..."
 wait_for_url "https://${INSTALL_HOST}:8443/api"
 
-CMD="chroot /host docker exec -it origin"
+CMD="chroot /host docker exec -i origin"
 echo "Starting registry services..."
 
 set -x
@@ -71,7 +71,7 @@ $CMD oc new-app --template registry-console-template \
      -p OPENSHIFT_OAUTH_PROVIDER_URL=https://${INSTALL_HOST}:8443,COCKPIT_KUBE_URL=https://${INSTALL_HOST},REGISTRY_HOST=${INSTALL_HOST}:5000
 # we're hacking the service to use a node port to reduce deployment complexity
 $CMD oc patch service registry-console -p \
-     '{ "spec": { "type": "NodePort", "selector": {"name": "registry-console"}, "ports": [ {"nodePort": 443, "port": 9000, "targetPort": 9090}] }}'
+     '{ "spec": { "type": "NodePort", "selector": {"name": "registry-console"}, "ports": [ {"name": "https", "nodePort": 443, "port": 9000, "targetPort": 9090}, {"name": "http", "nodePort": 80, "port": 9000, "targetPort": 9090} ] }}'
 
 set +x
 echo "Updating default project configuration"
@@ -79,10 +79,10 @@ set -x
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-shared.json
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-unshared.json
 $CMD oc policy add-role-to-group registry-viewer system:unauthenticated
-$CMD oc policy add-role-to-group registry-viewer system:unauthenticated
 $CMD oadm policy add-role-to-user cluster-admin admin
 $CMD oadm policy add-cluster-role-to-user system:image-puller pulluser
-sed -i 's/  projectRequestTemplate:.*$/  projectRequestTemplate: "default\/registry-newproject-template-shared"/' /etc/origin/master/master-config.yaml
+sudo sed -i 's/  projectRequestTemplate:.*$/  projectRequestTemplate: "default\/registry-newproject-template-shared"/' /etc/origin/master/master-config.yaml;
+#sudo sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"default\/registry-newproject-template-shared\"/g" /etc/origin/master/master-config.yaml;
 
 set +x
 echo "Restarting API server"

@@ -10,11 +10,18 @@ done
 docker tag openshift/origin-pod:latest openshift/origin-pod:v1.2.0-rc1-3-g4a17672;
 docker tag openshift/origin-deployer openshift/origin-deployer:v1.2.0-rc1-3-g4a17672;
 
+chroot /host docker tag openshift/origin-pod:latest openshift/origin-pod:v1.2.0-rc1-3-g4a17672;
+chroot /host docker tag openshift/origin-deployer openshift/origin-deployer:v1.2.0-rc1-3-g4a17672;
+
 INSTALL_HOST=${1:-`hostname`}
 echo "Installing using hostname ${INSTALL_HOST}"
 
 # write out configuration
-openshift start --write-config /etc/origin/ --etcd-dir /var/lib/origin/etcd --volume-dir /var/lib/origin/volumes --public-master ${INSTALL_HOST}
+openshift start --write-config /etc/origin/ \
+  --etcd-dir /var/lib/origin/etcd \
+  --volume-dir /var/lib/origin/volumes \
+  --public-master ${INSTALL_HOST} \
+  --hostname ${INSTALL_HOST}
 
 echo "Copy files to host"
 
@@ -32,11 +39,13 @@ cp /container/etc/origin/registry-login-template.html /host/etc/origin/master/si
 cat /etc/origin/master/master.server.crt /etc/origin/master/master.server.key > /etc/origin/registry/master.server.cert
 
 set +x
+PORT_RANGE-"80-32767";
 
-echo "Updating servicesNodePortRange to 443-32767..."
-sed -i 's/  servicesNodePortRange:.*$/  servicesNodePortRange: 443-32767/' /etc/origin/master/master-config.yaml
+echo "Updating servicesNodePortRange to ${PORT_RANGE}..."
+sed -i 's/  servicesNodePortRange:.*$/  servicesNodePortRange: ${PORT_RANGE}/' /etc/origin/master/master-config.yaml
 echo "Updating login template"
 sed -i 's/  templates: null$/  templates:\n    login: site\/registry-login-template.html/' /etc/origin/master/master-config.yaml
+#sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"default\/\"/g"
 
 cp /container/etc/origin/users.htpasswd /host/etc/origin/master/.
 chmod +x /container/etc/origin/atomic-registry-initauth.sh
