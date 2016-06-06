@@ -58,7 +58,7 @@ objects:
           containers:
             -
               name: "registry-console"
-              image: "mohammedzee1000/centos-cockpit-kubernetes"
+              image: "mohammedzee1000/centos-atomic-registry-quickstart"
               ports:
                 -
                   containerPort: 9090
@@ -104,8 +104,6 @@ objects:
                 periodSeconds: 10
                 successThreshold: 1
                 timeoutSeconds: 5
-
-
   -
     kind: Service
     apiVersion: v1

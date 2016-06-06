@@ -1,13 +1,11 @@
 FROM openshift/origin
-MAINTAINER Mohammed Zeeshan Ahmed <mohammed.zee1000@gmail.com>
+MAINTAINER Mohammed Zeeshan Ahmed <moahmed@redhat.com>
 
 ADD install.sh run.sh uninstall.sh /container/bin/
 ADD registry-console-template.yaml \
     registry-login-template.html \
     registry-newproject-template-shared.json \
     registry-newproject-template-unshared.json \
-    users.htpasswd \
-    atomic-registry-initauth.sh\
     /container/etc/origin/
 
 LABEL name="projectatomic/atomic-registry-quickstart" \
