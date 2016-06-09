@@ -58,7 +58,7 @@ objects:
           containers:
             -
               name: "registry-console"
-              image: "mohammedzee1000/centos-atomic-registry-quickstart"
+              image: "mohammedzee1000/centos-cockpit-kubernetes"
               ports:
                 -
                   containerPort: 9090

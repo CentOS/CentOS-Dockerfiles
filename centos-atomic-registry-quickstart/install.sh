@@ -33,7 +33,6 @@ cp /container/etc/origin/registry-login-template.html /host/etc/origin/master/si
 cat /etc/origin/master/master.server.crt /etc/origin/master/master.server.key > /etc/origin/registry/master.server.cert
 
 set +x
-
 PORT_RANGE="80-32767"
 echo "Updating servicesNodePortRange to ${PORT_RANGE}..."
 sed -i "s/  servicesNodePortRange:.*$/  servicesNodePortRange: ${PORT_RANGE}/" /etc/origin/master/master-config.yaml
@@ -42,4 +41,4 @@ sed -i "s/  templates: null$/  templates:\n    login: site\/registry-login-templ
 
 echo "Optionally edit configuration file /etc/origin/master/master-config.yaml,"
 echo "add certificates to /etc/origin/master,"
-echo "then run 'atomic run mohammedzee1000/centos-atomic-registry-quickstart'"
+echo "then run 'atomic run projectatomic/atomic-registry-quickstart'"

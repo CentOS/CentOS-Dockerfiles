@@ -47,7 +47,7 @@ chroot /host docker run -d --name "origin" \
 echo "Waiting for services to come up..."
 wait_for_url "https://${INSTALL_HOST}:8443/api"
 
-CMD="chroot /host docker exec -it origin"
+CMD="chroot /host docker exec -i origin"
 echo "Starting registry services..."
 
 set -x
