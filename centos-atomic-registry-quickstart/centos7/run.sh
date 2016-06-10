@@ -78,11 +78,7 @@ echo "Updating default project configuration"
 set -x
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-shared.json
 $CMD oc create -f /etc/origin/registry/registry-newproject-template-unshared.json
-$CMD oc policy add-role-to-group registry-viewer system:unauthenticated
-$CMD oadm policy add-role-to-user cluster-admin admin
-$CMD oadm policy add-cluster-role-to-user system:image-puller pulluser
-sudo sed -i 's/  projectRequestTemplate:.*$/  projectRequestTemplate: "default\/registry-newproject-template-shared"/' /etc/origin/master/master-config.yaml;
-#sudo sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"default\/registry-newproject-template-shared\"/g" /etc/origin/master/master-config.yaml;
+sed -i 's/  projectRequestTemplate:.*$/  projectRequestTemplate: "default\/registry-newproject-template-shared"/' /etc/origin/master/master-config.yaml
 
 set +x
 echo "Restarting API server"
@@ -91,13 +87,3 @@ chroot /host docker restart origin
 
 set +x
 echo "Web UI hosted at https://${INSTALL_HOST}"
-echo "########################### FIRST STEPS ##################################";
-echo " * Login with admin/admin@123 on https://${INSTALL_HOST}:8443";
-echo " * Create a project and then run the following commands in the machine hosting the atomic registry";
-echo " ** docker exec <origincontainerid> oc policy add-role-to-user admin admin -n <PROJECT NAME>";
-echo " ** docker exec <origincontainerid> oc policy add-role-to-user basic-user pulluser -n <PROJECT NAME>";
-echo " * If a user wishes to push/pull images from/to repository, first login to web interface, and then open";
-echo "   ? > About, click to show token and then use it in docker login as "
-echo " ** docker login -u admin -p <THE REVEALED TOKEN> <hostname>:5000";
-echo " * Now depending on who you have logged in as, you should be able to push / pull images as ";
-echo " ** docker push ${INSTALL_HOST}:5000/<PROJECT NAME>/<IMAGE NAME>";

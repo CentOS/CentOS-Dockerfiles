@@ -6,11 +6,9 @@ ADD registry-console-template.yaml \
     registry-login-template.html \
     registry-newproject-template-shared.json \
     registry-newproject-template-unshared.json \
-    users.htpasswd \
-    atomic-registry-initauth.sh\
     /container/etc/origin/
 
-LABEL name="projectatomic/atomic-registry-quickstart" \
+LABEL name="registry.centos.org/mohammedzee1000/c7-atomic-registry-quickstart" \
       vendor="Project Atomic" \
       url="https://projectatomic.io/registry" \
       summary="Quickstart image for Atomic Registry" \

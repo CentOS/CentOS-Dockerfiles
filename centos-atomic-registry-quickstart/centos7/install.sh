@@ -1,17 +1,11 @@
 #!/bin/bash
 
-IMAGES=(openshift/origin openshift/origin-pod openshift/origin-deployer openshift/origin-docker-registry registry.centos.org/centos/c7-kubernetes-cockpit)
+IMAGES=(openshift/origin openshift/origin-docker-registry registry.centos.org/mohammedzee1000/c7-kubernetes-cockpit)
 
 for IMAGE in "${IMAGES[@]}"
 do
   chroot /host docker pull $IMAGE
 done
-
-docker tag openshift/origin-pod:latest openshift/origin-pod:v1.2.0-rc1-3-g4a17672;
-docker tag openshift/origin-deployer openshift/origin-deployer:v1.2.0-rc1-3-g4a17672;
-
-chroot /host docker tag openshift/origin-pod:latest openshift/origin-pod:v1.2.0-rc1-3-g4a17672;
-chroot /host docker tag openshift/origin-deployer openshift/origin-deployer:v1.2.0-rc1-3-g4a17672;
 
 INSTALL_HOST=${1:-`hostname`}
 echo "Installing using hostname ${INSTALL_HOST}"
@@ -39,23 +33,12 @@ cp /container/etc/origin/registry-login-template.html /host/etc/origin/master/si
 cat /etc/origin/master/master.server.crt /etc/origin/master/master.server.key > /etc/origin/registry/master.server.cert
 
 set +x
-PORT_RANGE-"80-32767";
-
+PORT_RANGE="80-32767"
 echo "Updating servicesNodePortRange to ${PORT_RANGE}..."
-sed -i 's/  servicesNodePortRange:.*$/  servicesNodePortRange: ${PORT_RANGE}/' /etc/origin/master/master-config.yaml
+sed -i "s/  servicesNodePortRange:.*$/  servicesNodePortRange: ${PORT_RANGE}/" /etc/origin/master/master-config.yaml
 echo "Updating login template"
-sed -i 's/  templates: null$/  templates:\n    login: site\/registry-login-template.html/' /etc/origin/master/master-config.yaml
-#sed -i "s/projectRequestTemplate: \"\"/projectRequestTemplate: \"default\/\"/g"
+sed -i "s/  templates: null$/  templates:\n    login: site\/registry-login-template.html/" /etc/origin/master/master-config.yaml
 
-cp /container/etc/origin/users.htpasswd /host/etc/origin/master/.
-chmod +x /container/etc/origin/atomic-registry-initauth.sh
-/container/etc/origin/atomic-registry-initauth.sh ${REG_AUTHPROVIDER}
-
-echo "######################### IMPORTANT #####################################"
 echo "Optionally edit configuration file /etc/origin/master/master-config.yaml,"
 echo "add certificates to /etc/origin/master,"
-echo "then run 'atomic run mohammedzee1000/centos-atomic-registry-quickstart'"
-echo "######################## DEFAULT AUTHENTICATION #########################";
-echo "By default, two users are available admin/admin@123 pulluser@pulluser@123";
-echo "These users details are located at /etc/origin/master/users.htpasswd, edit";
-echo "to change password";
+echo "then run 'atomic run projectatomic/atomic-registry-quickstart'"
