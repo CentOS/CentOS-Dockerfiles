@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGES=(openshift/origin openshift/origin-docker-registry registry.centos.org/mohammedzee1000/c7-kubernetes-cockpit)
+IMAGES=(openshift/origin openshift/origin-docker-registry registry.centos.org/centos/c7-cockpit-kubernetes)
 
 for IMAGE in "${IMAGES[@]}"
 do
