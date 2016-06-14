@@ -58,7 +58,7 @@ objects:
           containers:
             -
               name: "registry-console"
-              image: "registry.centos.org/mohammedzee1000/c7-kubernetes-cockpit"
+              image: "registry.centos.org/centos/c7-cockpit-kubernetes"
               ports:
                 -
                   containerPort: 9090
@@ -132,7 +132,7 @@ objects:
         - annotations: null
           from:
             kind: DockerImage
-            name: registry.centos.org/mohammedzee1000/c7-kubernetes-cockpit
+            name: registry.centos.org/centos/c7-cockpit-kubernetes
           name: latest
   -
     kind: OAuthClient
