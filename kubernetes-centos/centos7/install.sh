@@ -7,6 +7,11 @@ yum install -y cockpit-shell cockpit-ws cockpit-kubernetes ;
 # Remove unwanted packages
 rm -rf /usr/share/cockpit/realmd/ /usr/share/cockpit/system/ /usr/share/cockpit/tuned/ /usr/share/cockpit/users/ /usr/share/cockpit/dashboard/
 
+# Remove unwanted cockpit-bridge binaries
+rm -rf /usr/bin/cockpit-bridge
+rm -rf /usr/lib64/security/pam_reauthorize.so
+rm -rf /usr/libexec/cockpit-polkit
+
 rm -rf /container/scripts
 rm -rf /container/rpms
 
