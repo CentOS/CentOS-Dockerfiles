@@ -1,5 +1,5 @@
-FROM openshift/origin
-MAINTAINER Mohammed Zeeshan Ahmed <mohammed.zee1000@gmail.com>
+FROM registry.centos.org/openshift/origin
+MAINTAINER Mohammed Zeeshan Ahmed <moahmed@redhat.com>
 
 ADD install.sh run.sh uninstall.sh /container/bin/
 ADD registry-console-template.yaml \

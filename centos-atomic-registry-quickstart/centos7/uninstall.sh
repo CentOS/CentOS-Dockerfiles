@@ -38,7 +38,7 @@ do
 done
 
 set +x
-IMAGES=(openshift/origin openshift/origin-docker-registry registry.centos.org/centos/c7-cockpit-kubernetes)
+IMAGES=(registry.centos.org/openshift/origin registry.centosorg/openshift/origin-docker-registry registry.centos.org/c7-cockpit-kubernetes)
 
 echo "Uninstallation complete."
 echo "Stopped container and images have not been removed. To remove them manually run:"

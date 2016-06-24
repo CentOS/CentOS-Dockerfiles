@@ -39,7 +39,7 @@ chroot /host docker run -d --name "origin" \
         -e KUBECONFIG=/etc/origin/master/admin.kubeconfig \
         -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys -v /var/lib/docker:/var/lib/docker:rw \
         -v /etc/origin/:/etc/origin/ -v /var/lib/origin:/var/lib/origin \
-        openshift/origin start \
+        registry.centos.org/openshift/origin start \
         --master-config /etc/origin/master/master-config.yaml \
         --node-config=/etc/origin/node/node-config.yaml \
         --latest-images=true

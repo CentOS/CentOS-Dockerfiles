@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGES=(openshift/origin openshift/origin-docker-registry registry.centos.org/centos/c7-cockpit-kubernetes)
+IMAGES=(registry.centos.org/openshift/origin registry.centos.org/openshift/origin-docker-registry registry.centos.org/centos/c7-cockpit-kubernetes)
 
 for IMAGE in "${IMAGES[@]}"
 do
@@ -41,4 +41,4 @@ sed -i "s/  templates: null$/  templates:\n    login: site\/registry-login-templ
 
 echo "Optionally edit configuration file /etc/origin/master/master-config.yaml,"
 echo "add certificates to /etc/origin/master,"
-echo "then run 'atomic run projectatomic/atomic-registry-quickstart'"
+echo "then run 'atomic run registry.centos.org/atomic-registry/c7-atomic-registry-quickstart'"
