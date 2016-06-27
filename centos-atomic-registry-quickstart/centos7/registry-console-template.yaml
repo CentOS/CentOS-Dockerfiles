@@ -132,7 +132,7 @@ objects:
         - annotations: null
           from:
             kind: DockerImage
-            name: registry.centos.org/centos/c7-cockpit-kubernetes
+            name: "registry.centos.org/centos/c7-cockpit-kubernetes"
           name: latest
   -
     kind: OAuthClient

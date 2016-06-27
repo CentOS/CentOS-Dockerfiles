@@ -8,7 +8,7 @@ ADD registry-console-template.yaml \
     registry-newproject-template-unshared.json \
     /container/etc/origin/
 
-LABEL name="atomic-registry/c7-atomic-registry-quickstart" \
+LABEL name="registry.centos.org/atomic-registry/c7-atomic-registry-quickstart" \
       vendor="Project Atomic" \
       url="https://projectatomic.io/registry" \
       summary="Quickstart image for Atomic Registry" \
