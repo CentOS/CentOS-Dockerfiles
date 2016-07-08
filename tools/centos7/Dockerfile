@@ -7,9 +7,7 @@ LABEL RUN="docker run -it --name NAME --privileged --ipc=host --net=host --pid=h
 RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
 
 # Reinstall all packages to get man pages for them
-RUN yum -y swap -- remove systemd-container systemd-container-libs \
-                -- install systemd systemd-libs && \
-    yum -y reinstall "*" && yum clean all
+RUN yum -y reinstall "*" && yum clean all
 
 # Swap out the systemd-container package and install all useful packages
 RUN yum -y install \
