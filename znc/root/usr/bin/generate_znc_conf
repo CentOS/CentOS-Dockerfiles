@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+
+import hashlib
+import string
+import os
+from random import SystemRandom
+
+raw_password = os.getenv('ZNC_ADMIN_PASSWORD', 'admin')
+
+salt_chars = string.ascii_letters + string.digits
+random = SystemRandom()
+salt = "".join([random.choice(salt_chars) for i in range(20)])
+hash_password = "sha256#{hash}#{salt}#".format(
+    hash=hashlib.sha256((raw_password+salt).encode('utf-8')).hexdigest(),
+    salt=salt)
+
+print("{0}={1}".format('ADMIN_PASS', hash_password))
+
