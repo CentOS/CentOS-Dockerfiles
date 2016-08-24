@@ -1,0 +1,5 @@
+# This is for the purpose of building the container through the CentOS Communnity 
+# Container Pipeline. https://github.com/CentOS/container-index 
+
+job-id: postgres
+test-skip: true
