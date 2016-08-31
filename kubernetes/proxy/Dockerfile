@@ -1,5 +1,5 @@
-FROM fedora/kubernetes-node
-MAINTAINER Solly Ross <sross@redhat.com>
+FROM centos/kubernetes-node
+MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 RUN yum install -y iptables && yum clean all
 

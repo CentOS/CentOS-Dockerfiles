@@ -1,5 +1,5 @@
-FROM fedora/kubernetes-node
-MAINTAINER Solly Ross <sross@redhat.com>
+FROM centos/kubernetes-node
+MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 # NOTE: kubelet wants pidof (from sysvinit-tools), but it can't use it
 # properly in a container, so we skip installing it
