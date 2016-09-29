@@ -1,23 +1,16 @@
-FROM centos:centos7
+FROM centos:latest
+MAINTAINER http://www.centos.org
+LABEL Vendor="CentOS"
+LABEL License=GPLv2
+LABEL Version=2.4.6-31
 
-MAINTAINER The CentOS Project <cloud-ops@centos.org>
+RUN yum -y update && yum clean all
+RUN yum -y install httpd && yum clean all
 
-LABEL Vendor="CentOS" \
-      License=GPLv2 \
-      Version=2.4.6-40
+EXPOSE 80
 
-RUN yum -y --setopt=tsflags=nodocs update && \
-    yum -y --setopt=tsflags=nodocs install httpd && \
-    yum clean all
+# Simple startup script to avoid some issues observed with container restart 
+ADD run-httpd.sh /run-httpd.sh
+RUN chmod -v +x /run-httpd.sh
 
-EXPOSE 8080
-
-# need to change some permissions to allow non-root user to start things
-# had to do these steps to give the httpd deamon the ability to.
-# This actually appears due to a bug with Windows and Mac. It looks like
-# we could have just "ls" on the directory to get the chmod to stick
-RUN rm -rf /run/httpd && mkdir /run/httpd && chmod -R a+rwx /run/httpd
-
-USER 1001
-
-CMD [ "/usr/sbin/apachectl" "-DFOREGROUND" ]
+CMD ["/run-httpd.sh"]
