@@ -40,7 +40,7 @@ Run wordpress
 Next start the wordpress with the db container linked:
 
 ```
-docker run --link=mariadb:db -d --name wordpress -p 8080:8080 <yourname>/wordpress
+docker run --link=mariadb:db -d --name wordpress -p 80:80 <yourname>/wordpress
 ```
 
 Now connect to wordpress on localhost:8080 from your browser.
