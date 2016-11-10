@@ -13,7 +13,7 @@ RUN mkdir /var/lib/etherpad
 WORKDIR   /var/lib/etherpad
 
 # Get etherpad 1.5.7
-RUN curl -L https://github.com/ether/etherpad-lite/tarball/1.5.7 | tar -xz --strip-components=1
+RUN curl -L https://github.com/ether/etherpad-lite/tarball/1.6.0 | tar -xz --strip-components=1
 
 # Add settings.json
 COPY settings.json ./
