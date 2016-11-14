@@ -1,0 +1,202 @@
+{
+	"ociVersion": "0.5.0",
+	"platform": {
+		"os": "linux",
+		"arch": "amd64"
+	},
+	"process": {
+		"terminal": false,
+		"user": {},
+		"args": [
+			"/usr/bin/flanneld-run.sh"
+		],
+		"env": [
+			"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                        "FLANNELD_ETCD_PREFIX=$FLANNELD_ETCD_PREFIX",
+                        "FLANNELD_ETCD_ENDPOINTS=$FLANNELD_ETCD_ENDPOINTS",
+			"TERM=xterm",
+			"NAME=$NAME"
+		],
+		"cwd": "/",
+		"capabilities": [
+                        "CAP_FOWNER",
+                        "CAP_FSETID",
+                        "CAP_KILL",
+                        "CAP_SETGID",
+                        "CAP_SETUID",
+                        "CAP_SETPCAP",
+                        "CAP_LINUX_IMMUTABLE",
+                        "CAP_NET_BIND_SERVICE",
+                        "CAP_NET_BROADCAST",
+                        "CAP_NET_ADMIN",
+                        "CAP_NET_RAW",
+                        "CAP_IPC_LOCK",
+                        "CAP_IPC_OWNER",
+                        "CAP_SYS_MODULE",
+                        "CAP_SYS_RAWIO",
+                        "CAP_SYS_CHROOT",
+                        "CAP_SYS_PTRACE",
+                        "CAP_SYS_PACCT",
+                        "CAP_SYS_ADMIN",
+                        "CAP_SYS_BOOT",
+                        "CAP_SYS_NICE",
+                        "CAP_SYS_RESOURCE",
+                        "CAP_SYS_TIME",
+                        "CAP_SYS_TTY_CONFIG",
+                        "CAP_MKNOD",
+                        "CAP_LEASE",
+                        "CAP_AUDIT_WRITE",
+                        "CAP_AUDIT_CONTROL",
+                        "CAP_SETFCAP",
+                        "CAP_MAC_OVERRIDE",
+                        "CAP_MAC_ADMIN",
+                        "CAP_SYSLOG",
+                        "CAP_WAKE_ALARM",
+                        "CAP_BLOCK_SUSPEND"
+		],
+		"rlimits": [
+			{
+				"type": "RLIMIT_NOFILE",
+				"hard": 1024,
+				"soft": 1024
+			}
+		],
+		"noNewPrivileges": false
+	},
+	"root": {
+		"path": "rootfs",
+		"readonly": true
+	},
+	"hostname": "flannel",
+	"mounts": [
+		{
+			"destination": "/proc",
+			"type": "proc",
+			"source": "proc"
+		},
+                {
+                        "type": "bind",
+                        "source": "/dev",
+                        "destination": "/dev",
+                        "options": [
+                                "rbind",
+                                "rw",
+                                "mode=755"
+                        ]
+                },
+		{
+			"destination": "/dev/pts",
+			"type": "devpts",
+			"source": "devpts",
+			"options": [
+				"nosuid",
+				"noexec",
+				"newinstance",
+				"ptmxmode=0666",
+				"mode=0620",
+				"gid=5"
+			]
+		},
+		{
+			"destination": "/dev/shm",
+			"type": "tmpfs",
+			"source": "shm",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev",
+				"mode=1777",
+				"size=65536k"
+			]
+		},
+		{
+			"destination": "/dev/mqueue",
+			"type": "mqueue",
+			"source": "mqueue",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev"
+			]
+		},
+		{
+			"destination": "/sys",
+			"type": "sysfs",
+			"source": "sysfs",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev",
+				"ro"
+			]
+		},
+		{
+			"destination": "/sys/fs/cgroup",
+			"type": "cgroup",
+			"source": "cgroup",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev",
+				"relatime",
+				"ro"
+			]
+		},
+                {
+                        "type": "bind",
+                        "source": "/etc/systemd/system/docker.service.d",
+                        "destination": "/etc/systemd/system/docker.service.d",
+                        "options": [
+                                "rbind",
+                                "rw",
+                                "mode=755"
+                        ]
+                },
+                {
+			"source": "${RUN_DIRECTORY}/${NAME}",
+                        "destination": "/run/flannel",
+                        "type": "bind",
+                        "options": [
+                                "rw",
+                                "rbind",
+                                "rprivate"
+                        ]
+                }
+	],
+	"hooks": {},
+	"linux": {
+		"resources": {
+			"devices": [
+				{
+					"allow": false,
+					"access": "rwm"
+				}
+			]
+		},
+		"namespaces": [
+			{
+				"type": "ipc"
+			},
+			{
+				"type": "uts"
+			},
+			{
+				"type": "mount"
+			}
+		],
+		"maskedPaths": [
+			"/proc/kcore",
+			"/proc/latency_stats",
+			"/proc/timer_stats",
+			"/proc/sched_debug"
+		],
+		"readonlyPaths": [
+			"/proc/asound",
+			"/proc/bus",
+			"/proc/fs",
+			"/proc/irq",
+			"/proc/sys",
+			"/proc/sysrq-trigger"
+		]
+	}
+}

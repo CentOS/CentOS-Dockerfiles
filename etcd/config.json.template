@@ -1,0 +1,196 @@
+{
+	"ociVersion": "0.3.0",
+	"platform": {
+		"os": "linux",
+		"arch": "amd64"
+	},
+	"process": {
+		"terminal": false,
+		"user": {
+			"uid": 0,
+			"gid": 0
+		},
+		"args": [
+			"/usr/bin/etcd-env.sh",
+			"/usr/bin/etcd"
+		],
+		"env": [
+			"NAME=$NAME",
+			"ETCD_NAME=$ETCD_NAME",
+			"ETCD_ADVERTISE_CLIENT_URLS=$ETCD_ADVERTISE_CLIENT_URLS",
+			"ETCD_LISTEN_CLIENT_URLS=$ETCD_LISTEN_CLIENT_URLS",
+			"ETCD_INITIAL_ADVERTISE_PEER_URLS=$ETCD_INITIAL_ADVERTISE_PEER_URLS",
+			"ETCD_LISTEN_PEER_URLS=$ETCD_LISTEN_PEER_URLS",
+			"ETCD_INITIAL_CLUSTER=$ETCD_INITIAL_CLUSTER",
+			"ETCD_INITIAL_CLUSTER_STATE=$ETCD_INITIAL_CLUSTER_STATE",
+			"ETCD_WAL_DIR=$ETCD_WAL_DIR",
+			"ETCD_SNAPSHOT_COUNT=$ETCD_SNAPSHOT_COUNT",
+			"ETCD_HEARTBEAT_INTERVAL=$ETCD_HEARTBEAT_INTERVAL",
+			"ETCD_ELECTION_TIMEOUT=$ETCD_ELECTION_TIMEOUT",
+			"ETCD_MAX_SNAPSHOTS=$ETCD_MAX_SNAPSHOTS",
+			"ETCD_MAX_WALS=$ETCD_MAX_WALS",
+			"ETCD_CORS=$ETCD_CORS",
+			"ETCD_INITIAL_CLUSTER_TOKEN=$ETCD_INITIAL_CLUSTER_TOKEN",
+			"ETCD_DISCOVERY=$ETCD_DISCOVERY",
+			"ETCD_DISCOVERY_SRV=$ETCD_DISCOVERY_SRV",
+			"ETCD_DISCOVERY_FALLBACK=$ETCD_DISCOVERY_FALLBACK",
+			"ETCD_DISCOVERY_PROXY=$ETCD_DISCOVERY_PROXY",
+			"ETCD_PROXY=$ETCD_PROXY",
+			"ETCD_PROXY_FAILURE_WAIT=$ETCD_PROXY_FAILURE_WAIT",
+			"ETCD_PROXY_REFRESH_INTERVAL=$ETCD_PROXY_REFRESH_INTERVAL",
+			"ETCD_PROXY_DIAL_TIMEOUT=$ETCD_PROXY_DIAL_TIMEOUT",
+			"ETCD_PROXY_WRITE_TIMEOUT=$ETCD_PROXY_WRITE_TIMEOUT",
+			"ETCD_PROXY_READ_TIMEOUT=$ETCD_PROXY_READ_TIMEOUT",
+			"ETCD_CERT_FILE=$ETCD_CERT_FILE",
+			"ETCD_KEY_FILE=$ETCD_KEY_FILE",
+			"ETCD_CLIENT_CERT_AUTH=$ETCD_CLIENT_CERT_AUTH",
+			"ETCD_TRUSTED_CA_FILE=$ETCD_TRUSTED_CA_FILE",
+			"ETCD_PEER_CERT_FILE=$ETCD_PEER_CERT_FILE",
+			"ETCD_PEER_KEY_FILE=$ETCD_PEER_KEY_FILE",
+			"ETCD_PEER_CLIENT_CERT_AUTH=$ETCD_PEER_CLIENT_CERT_AUTH",
+			"ETCD_PEER_TRUSTED_CA_FILE=$ETCD_PEER_TRUSTED_CA_FILE",
+			"ETCD_DEBUG=$ETCD_DEBUG",
+			"ETCD_LOG_PACKAGE_LEVELS=$ETCD_LOG_PACKAGE_LEVELS",
+			"ETCD_STRICT_RECONFIG_CHECK=$ETCD_STRICT_RECONFIG_CHECK",
+			"ETCD_ENABLE_PPROF=$ETCD_ENABLE_PPROF",
+			"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+			"TERM=xterm"
+		],
+		"cwd": "/"
+	},
+	"root": {
+		"path": "rootfs",
+		"readonly": true
+	},
+	"mounts": [
+		{
+			"destination": "/proc",
+			"type": "proc",
+			"source": "proc"
+		},
+		{
+			"destination": "/dev",
+			"type": "tmpfs",
+			"source": "tmpfs",
+			"options": [
+				"nosuid",
+				"strictatime",
+				"mode=755",
+				"size=65536k"
+			]
+		},
+		{
+			"destination": "/dev/pts",
+			"type": "devpts",
+			"source": "devpts",
+			"options": [
+				"nosuid",
+				"noexec",
+				"newinstance",
+				"ptmxmode=0666",
+				"mode=0620",
+				"gid=5"
+			]
+		},
+		{
+			"destination": "/dev/shm",
+			"type": "tmpfs",
+			"source": "shm",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev",
+				"mode=1777",
+				"size=65536k"
+			]
+		},
+		{
+			"destination": "/dev/mqueue",
+			"type": "mqueue",
+			"source": "mqueue",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev"
+			]
+		},
+		{
+			"destination": "/sys",
+			"type": "sysfs",
+			"source": "sysfs",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev"
+			]
+		},
+		{
+			"destination": "/sys/fs/cgroup",
+			"type": "cgroup",
+			"source": "cgroup",
+			"options": [
+				"nosuid",
+				"noexec",
+				"nodev",
+				"relatime",
+				"ro"
+			]
+		},
+		{
+			"type": "bind",
+			"source": "${STATE_DIRECTORY}/etcd/${NAME}.etcd",
+			"destination": "/var/lib/etcd",
+			"options": [
+				"rbind",
+				"rw",
+				"mode=755"
+			]
+		},
+		{
+			"type": "bind",
+			"source": "${RUN_DIRECTORY}/${NAME}",
+			"destination": "/var/run/etcd",
+			"options": [
+				"rbind",
+				"rw",
+				"mode=755"
+			]
+		}
+	],
+	"linux": {
+		"capabilities": [
+			"CAP_AUDIT_WRITE",
+			"CAP_KILL",
+			"CAP_NET_BIND_SERVICE"
+		],
+		"rlimits": [
+			{
+				"type": "RLIMIT_NOFILE",
+				"hard": 1024,
+				"soft": 1024
+			}
+		],
+		"resources": {
+			"devices": [
+				{
+					"allow": false,
+					"access": "rwm"
+				}
+			]
+		},
+		"namespaces": [
+			{
+				"type": "pid"
+			},
+			{
+				"type": "ipc"
+			},
+			{
+				"type": "mount"
+			}
+		],
+		"devices": null,
+		"apparmorProfile": "",
+		"selinuxProcessLabel": ""
+	}
+}

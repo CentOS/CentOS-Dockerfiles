@@ -1,0 +1,20 @@
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network.target
+After=network-online.target
+Wants=network-online.target
+After=$AFTER
+Before=docker.service
+
+[Service]
+ExecStart=$EXEC_START
+ExecStop=$EXEC_STOP
+ExecStartPost=/usr/bin/sh -c "while test \! -s ${RUN_DIRECTORY}/${NAME}/docker; do sleep 0.1; done"
+ExecStopPost=/bin/rm /etc/systemd/system/docker.service.d/$NAME.conf
+Restart=on-failure
+WorkingDirectory=$DESTDIR
+RuntimeDirectory=${NAME}
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=$REQUIRED_BY
