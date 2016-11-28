@@ -7,9 +7,7 @@
 FROM centos:centos7
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
-RUN yum -y update; yum clean all
-RUN yum -y install epel-release; yum clean all
-RUN yum -y install pwgen wget logrotate rabbitmq-server; yum clean all
+RUN yum -y install epel-release && yum -y update && yum -y install pwgen wget logrotate rabbitmq-server  && yum clean all
 RUN /usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_management
 
 #
@@ -28,7 +26,5 @@ EXPOSE 5672 15672 4369 25672
 
 #
 # entrypoint/cmd for container
-# we will set a random password and add one vhost for development
-ENV DEVEL_VHOST_NAME develop
 
 CMD ["/run-rabbitmq-server.sh"]

@@ -13,6 +13,10 @@ To run:
 
 	# docker run -d -p 5672:5672 -p 15672:15672 <username>/rabbitmq:centos7
 
+Define own username and password instead of having it generated:
+
+	# docker run -d -e RABBITMQ_USER=foo -e RABBITMQ_PASS=bar -p 5672:5672 -p 15672:15672 <username>/rabbitmq:centos7
+
 Confirm the RabbitMQ server started:
 
 ```
