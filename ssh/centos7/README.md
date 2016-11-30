@@ -4,7 +4,7 @@
 
 Copy the sources to your docker host and build the container:
 
-	# docker build -rm -t <username>/ssh:centos7 .
+	# docker build --rm -t <username>/ssh:centos7 .
 
 To run:
 
