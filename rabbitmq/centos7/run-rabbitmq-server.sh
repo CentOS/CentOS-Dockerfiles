@@ -1,19 +1,17 @@
 #!/bin/bash
 
 if [ ! -f /.run-rabbitmq-server-firstrun ]; then
-	# TBD
-	PASS=`pwgen -s 12 1`
+	RABBITMQ_USER="${RABBITMQ_USER:-admin}"
+	RABBITMQ_PASS="${RABBITMQ_PASS:-`pwgen -s 12 1`}"
 	cat >/etc/rabbitmq/rabbitmq.config <<EOF
 [
-	{rabbit, [{default_user, <<"admin">>}, {default_pass, <<"$PASS">>}]}
+	{rabbit, [{default_user, <<"$RABBITMQ_USER">>}, {default_pass, <<"$RABBITMQ_PASS">>}]}
 ].
 EOF
 
-	echo "set default user = admin and default password = $PASS"
+	echo "set default user = $RABBITMQ_USER and default password = $RABBITMQ_PASS"
 
 	# add the vhost
-	(sleep 10 && rabbitmqctl add_vhost $DEVEL_VHOST_NAME && rabbitmqctl set_permissions -p $DEVEL_VHOST_NAME admin ".*" ".*" ".*") &
-
 	touch /.run-rabbitmq-server-firstrun
 fi
 
