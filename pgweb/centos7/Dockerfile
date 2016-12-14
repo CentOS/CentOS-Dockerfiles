@@ -1,6 +1,8 @@
 FROM centos:7
 MAINTAINER Mohammed Zeeshan Ahmed <moahmed@redhat.com>
 
+ENV VERSION "0.9.6"
+
 RUN yum -y update && yum clean all
 
 COPY ./install-pgweb.py ./install-pgweb.py
