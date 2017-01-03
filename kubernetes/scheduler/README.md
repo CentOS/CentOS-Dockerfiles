@@ -1,7 +1,7 @@
-dockerfiles-fedora-kubernetes-scheduler
+dockerfiles-centos-kubernetes-scheduler
 =======================================
 
-Fedora dockerfile for kube-scheduler.  Tested with Docker 1.7.1.
+CentOS dockerfile for kube-scheduler.  Tested with docker-1.10.3-59.el7.centos.x86_64
 
 Get Docker version
 ```
@@ -10,7 +10,7 @@ Get Docker version
 
 To build:
 
-Build or pull the `fedora/kubernetes-master` container.
+Build or pull the `centos/kubernetes-master` container.
 
 Copy the source Dockerfile down and do the build:
 ```
