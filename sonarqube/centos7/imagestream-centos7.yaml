@@ -24,7 +24,7 @@ spec:
         version: '6.2'
       from:
         kind: DockerImage
-        name: goern/sonarqube-62-centos7:latest
+        name: centos/sonarqube-62-centos7:latest
     - name: '6.1'
       annotations:
         openshift.io/display-name: SonarQube 6.1
@@ -34,4 +34,4 @@ spec:
         version: '6.1'
       from:
         kind: DockerImage
-        name: goern/sonarqube-61-centos7:latest
+        name: centos/sonarqube-61-centos7:latest

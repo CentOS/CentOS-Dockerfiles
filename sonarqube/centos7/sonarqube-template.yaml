@@ -284,7 +284,7 @@ parameters:
 - name: SONARQUBE_REPOSITORY_NAME
   displayName: SonarQube Repository name
   description: 'Name of the repository containing the SonarQube container image to be used'
-  value: 'docker.io/goern'
+  value: 'docker.io/centos'
   required: true
 - name: SONARQUBE_IMAGE_NAME
   displayName: SonarQube container image name

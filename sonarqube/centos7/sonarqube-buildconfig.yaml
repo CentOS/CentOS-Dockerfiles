@@ -1,18 +1,26 @@
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: sonarqube
-  spec:
-    source:
-      type: Git
-      git:
-        uri: https://github.com/<username>/CentOS-Dockerfiles
-      contextDir: sonarqube/centos7
-    strategy:
-      type: Docker
-    output:
-      to:
+kind: BuildConfig
+apiVersion: v1
+metadata:
+  name: sonarqube
+spec:
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/CentOS/CentOS-Dockerfiles'
+    contextDir: sonarqube/centos7
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile.62
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'sonarqube:latest'
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChange:
+      from:
         kind: ImageStreamTag
-        name: "sonarqube:6.2.1"
-    triggers:
-    - type: ConfigChange
+        name: "centos7:latest"
+        namespace: openshift
