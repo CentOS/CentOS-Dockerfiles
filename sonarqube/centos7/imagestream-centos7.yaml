@@ -1,0 +1,37 @@
+kind: ImageStream
+apiVersion: v1
+metadata:
+  name: sonarqube
+  annotations:
+    openshift.io/display-name: SonarQube
+spec:
+  tags:
+    - name: latest
+      annotations:
+        openshift.io/display-name: SonarQube (Latest)
+        description: >-
+          This is SonarQube, the latest version
+        tags: sonarqube
+      from:
+        kind: ImageStreamTag
+        name: '6.2'
+    - name: '6.2'
+      annotations:
+        openshift.io/display-name: SonarQube 6.2
+        description: >-
+          This is SonarQube 6.2
+        tags: sonarqube
+        version: '6.2'
+      from:
+        kind: DockerImage
+        name: goern/sonarqube-62-centos7:latest
+    - name: '6.1'
+      annotations:
+        openshift.io/display-name: SonarQube 6.1
+        description: >-
+          This is SonarQube 6.1
+        tags: sonarqube
+        version: '6.1'
+      from:
+        kind: DockerImage
+        name: goern/sonarqube-61-centos7:latest

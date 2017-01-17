@@ -1,0 +1,18 @@
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: sonarqube
+  spec:
+    source:
+      type: Git
+      git:
+        uri: https://github.com/<username>/CentOS-Dockerfiles
+      contextDir: sonarqube/centos7
+    strategy:
+      type: Docker
+    output:
+      to:
+        kind: ImageStreamTag
+        name: "sonarqube:6.2.1"
+    triggers:
+    - type: ConfigChange
