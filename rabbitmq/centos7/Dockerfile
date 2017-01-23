@@ -11,13 +11,11 @@ MAINTAINER The CentOS Project <cloud-ops@centos.org>
 RUN yum -y install epel-release && yum -y update && yum -y install pwgen wget logrotate && yum -y install nss_wrapper gettext && yum clean all
 
 # Setup rabbitmq-server
-RUN mkdir -p /var/lib/rabbitmq && useradd -d /var/lib/rabbitmq -u 1001 -o -g 0 rabbitmq && \
+RUN useradd -d /var/lib/rabbitmq -u 1001 -o -g 0 rabbitmq && \
     yum -y install rabbitmq-server && yum clean all
 
 # Send the logs to stdout
 ENV RABBITMQ_LOGS=- RABBITMQ_SASL_LOGS=-
-
-VOLUME /var/lib/rabbitmq
 
 # Create directory for scripts and passwd template
 RUN mkdir -p /tmp/rabbitmq
