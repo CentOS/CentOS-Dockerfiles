@@ -21,7 +21,7 @@ RUN chown -R 1001:0 /srv && chmod -R 755 /srv
 
 USER 1001
 
-EXPOSE 80 443 2015
+EXPOSE 80 443 2015 8080 8443
 
 WORKDIR /srv/public
 
