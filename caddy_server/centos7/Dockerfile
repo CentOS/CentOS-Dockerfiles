@@ -4,7 +4,7 @@ LABEL VERSION="0.9.5" ARCHITECTURE="amd64"
 ARG plugins=git
 RUN yum -y update && yum clean all
 RUN yum -y install openssh-client git && yum clean all
-RUN mkdir -p /etc/caddy /var/www/html && useradd -u 1001 -g 0 -d /var/www/html caddy
+RUN mkdir -p /etc/caddy /var/www/html && useradd -u 1001 -g 0 -d /var/www caddy
 
 RUN curl --silent --show-error --fail --location \
       --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
