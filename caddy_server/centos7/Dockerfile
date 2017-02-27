@@ -1,4 +1,4 @@
-FROM centos
+FROM centos/centos:7
 MAINTAINER Mohammed Zeeshan Ahmed <moahmed@redhat.com>
 LABEL VERSION="0.9.5" ARCHITECTURE="amd64"
 ARG plugins=git
