@@ -1,7 +1,7 @@
 ## Caddy Server Dockerfile
 https://caddyserver.com
 
-This is a dockerfile for Caddy Server. Everything is loaded into `/srv` directory. The Caddyfile is put into `/etc/caddy/Caddyfile`
+This is a dockerfile for Caddy Server. Everything is loaded into `/var/www/html` directory. The Caddyfile is put into `/etc/caddy/Caddyfile`
 
 By default, content present inside `/var/www/html` will be served over web on the port 2015. Ports 80, 443, 8080 and 8443 are also exposed. Mount your content here with appropriate permissions.
 
