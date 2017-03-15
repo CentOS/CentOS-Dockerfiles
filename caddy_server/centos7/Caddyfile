@@ -1,7 +1,9 @@
 0.0.0.0
 
-browse
+root /var/www/html
 
 log stdout
 
 errors stdout
+
+ext .html .htm .php .txt
