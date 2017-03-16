@@ -1,4 +1,4 @@
-# This is for the purpose of building the container through the CentOS Communnity 
+# This is for the purpose of building the container through the CentOS Community 
 # Container Pipeline. https://github.com/CentOS/container-index 
 
 job-id: ssh
