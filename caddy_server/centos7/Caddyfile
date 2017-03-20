@@ -1,0 +1,11 @@
+0.0.0.0:2015, 0.0.0.0:8080
+
+browse
+
+root /var/www/html
+
+log stdout
+
+errors stdout
+
+ext .html .htm .php .txt
