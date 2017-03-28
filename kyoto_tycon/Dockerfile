@@ -1,6 +1,6 @@
 FROM registry.centos.org/centos/centos:latest
 
-# RUN yum -y update && yum clean all
+RUN yum -y update && yum clean all
 
 WORKDIR /usr/local/src/kyoto
 
