@@ -1,17 +1,19 @@
 FROM registry.centos.org/centos/centos:latest
 
-WORKDIR /usr/local/src
-
 # RUN yum -y update && yum clean all
 
-RUN mkdir -p /opt/scripts
+WORKDIR /usr/local/src/kyoto
 
-ADD ./install.sh /opt/scripts/
+RUN mkdir -p /opt/scripts /var/ktserver
+
+ADD ./install.sh ./fix-permissions.sh /opt/scripts/
 
 RUN . /opt/scripts/install.sh
 
 RUN ldconfig
 
 EXPOSE 1978 11401
+
+USER 1001
 
 CMD /etc/rc.d/init.d/ktserver start && tail -F /var/ktserver/log
