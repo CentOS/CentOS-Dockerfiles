@@ -8,7 +8,7 @@ Setup
 
 To build the image
 
-    # docker build --rm -t <yourname/postgresql .
+    # docker build --rm -t <yourname>/postgresql .
 
 
 Launching PostgreSQL
@@ -28,13 +28,13 @@ To connect to the container as the administrative `postgres` user:
 Creating a database at launch
 -----------------------------
 
-You can create a postgresql superuser at launch by specifying `DB_USER` and
-`DB_PASS` variables. You may also create a database by using `DB_NAME`. 
+You can create a postgresql superuser at launch by specifying `POSTGRESQL_USER` and
+`POSTGRESQL_PASSWORD` variables. You may also create a database by using `POSTGRESQL_DATABASE`.
 
     docker run --name postgresql -d \
-    -e 'DB_USER=username' \
-    -e 'DB_PASS=ridiculously-complex_password1' \
-    -e 'DB_NAME=my_database' \
+    -e 'POSTGRESQL_USER=username' \
+    -e 'POSTGRESQL_PASSWORD=ridiculously-complex_password1' \
+    -e 'POSTGRESQL_DATABASE=my_database' \
     <yourname>/postgresql
 
 To connect to your database with your newly created user:
