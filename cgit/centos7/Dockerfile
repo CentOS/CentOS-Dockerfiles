@@ -2,7 +2,7 @@ FROM registry.centos.org/centos/centos:7
 
 MAINTAINER Mohammed Zeeshan Ahmed <moahmed@redhat.com>
 
-# RUN yum -y update && yum clean all
+RUN yum -y update && yum clean all
 
 RUN mkdir -p /srv/git /opt/scripts
 
