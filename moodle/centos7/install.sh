@@ -7,7 +7,7 @@ HTTPD_CONF="/etc/httpd/conf/httpd.conf"
 HTTPD_WELCOME="/etc/httpd/conf.d/welcome.conf"
 INSTALL_PKGS2="httpd nss_wrapper gettext";
 PHP_REQUIRED="php php-mysql php-pgsql php-xml php-xmlrpc php-gd"
-PHP_GOOD_TO_HAVE="php-xcache php-intl php-soap php-xmlrpc php-mbstring"
+PHP_GOOD_TO_HAVE="php-pecl-zendopcache php-intl php-soap php-xmlrpc php-mbstring"
 PHP_PACKAGES="${PHP_REQUIRED} ${PHP_GOOD_TO_HAVE}"
 INSTALL_PKGS1="wget";
 INSTALL_PKGS="${INSTALL_PKGS1} ${INSTALL_PKGS2} ${PHP_PACKAGES}"
@@ -17,7 +17,7 @@ MOODLE_VERSION=${MOODLE_VERSION-"latest"}
 MOODLE_NODOT_VERSION=${MOODLE_NODOT_VERSION:-"moodle"}
 MOODLE_TAR="${MOODLE}-${MOODLE_VERSION}.tgz"
 MOODLE_DOWNLOAD_URL="${MOODLE_DOWNLOAD_BASE}/${MOODLE_NODOT_VERSION}/${MOODLE_TAR}"
-PHP_INI_LOC="/etc/php.ini"
+OPCACHE_INI_LOC="/etc/php.d/opcache.ini"
 
 export MOODLE_DATA="/var/moodledata"
 
@@ -45,17 +45,18 @@ done
 chmod -R 777 /etc/httpd/logs;
 
 # Enable opcache
-cat <<EOT >> ${PHP_INI_LOC}
+cat <<EOT > ${OPCACHE_INI_LOC}
 [opcache]
-opcache.enable=1
-opcache.enable_cli=1
-opcache.memory_consumption=128
-opcache.interned_strings_buffer=8
-opcache.max_accelerated_files=4000
-opcache.max_wasted_percentage=5
-opcache.use_cwd=1
-opcache.validate_timestamps=1
-opcache.fast_shutdown=1
+opcache.enable = 1
+opcache.memory_consumption = 64
+opcache.max_accelerated_files = 8000
+opcache.revalidate_freq = 60
+
+; Required for Moodle
+opcache.use_cwd = 1
+opcache.validate_timestamps = 1
+opcache.save_comments = 1
+opcache.enable_file_override = 0
 EOT
 
 # Cleanup
