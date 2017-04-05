@@ -17,11 +17,17 @@ if [ -z ${MOODLE_HOST} ]; then
     MOODLE_HOST="`hostname -i`";
 fi
 
+if [ -z ${MOODLE_HOST_NOPORT} ]; then
+    if [[ ${MOODLE_HOST} != *":"* ]]; then
+        MOODLE_HOST="${MOODLE_HOST}:8080"
+    fi
+fi
+
 if [ $1 == "moodle" ]; then
     sed -e "s/pgsql/${DB_TYPE}/
     s/username/${DB_USER}/
     s/password/${DB_PASSWD}/
-    s/http:\/\/example.com\/moodle/http:\/\/${MOODLE_HOST}:8080/
+    s/http:\/\/example.com\/moodle/http:\/\/${MOODLE_HOST}/
     s/localhost/${DB_HOST}/
     s/\/home\/example\/moodledata/\/var\/moodledata/" /var/www/html/config-dist.php > /var/www/html/config.php;
 
