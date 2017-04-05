@@ -7,7 +7,7 @@ export LD_PRELOAD=libnss_wrapper.so;
 export NSS_WRAPPER_PASSWD=/tmp/passwd;
 export NSS_WRAPPER_GROUP=/etc/group;
 
-DB_TYPE=${DB_TYPE:-"mysqli"};
+DB_TYPE=${DB_TYPE:-"pgsql"};
 DB_LIBRARY=${DB_LIBRARY:-"native"};
 DB_HOST=${DB_HOST:-"localhost"};
 DB_NAME=${DB_NAME:-"moodle"};
