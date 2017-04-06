@@ -25,32 +25,13 @@ if [ -z ${MOODLE_HOST_NOPORT} ]; then
     fi
 fi
 
-FREETDS_FILE="/etc/freetds.conf";
-FREETDS_VERSION="4.2";
-
-# Helpers
-
-mssql_freetds() {
-
-cat <<EOT > ${FREETDS_FILE}
-[global]
-    tds version = ${FREETDS_VERSION}
-    text size = 20971520
-    host = ${DB_HOST}
-    port = 1433
-    client charset = UTF-8
-EOT
-
-}
-
 # Main Begins
 
 if [ $1 == "moodle" ]; then
 
-    if [ ${DB_TYPE} == "mssql" ]; then
-        echo "The packages required for this require PHP 7, hence MSSQL is not currently supported";
+    if [ ${DB_TYPE} == "oci" ]; then
+        echo "Oracle database is not currently supported due to licensing issues with their client";
         exit 1
-        # mssql_freetds;
     fi
     sed -e "s/pgsql/${DB_TYPE}/
     s/username/${DB_USER}/
