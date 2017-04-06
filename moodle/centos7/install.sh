@@ -8,7 +8,7 @@ HTTPD_WELCOME="/etc/httpd/conf.d/welcome.conf"
 
 INSTALL_PKGS1="wget";
 INSTALL_PKGS2="httpd nss_wrapper gettext";
-REMI_REPO="http://rpms.famillecollet.com/enterprise/remi-release-7.rpm"
+REMI_REPO="https://rpms.remirepo.net/enterprise/remi-release-7.rpm"
 PHP_REMI_VERSION="${PHP_REMI_VERSION:-"php71"}"
 
 PHP1="${PHP_REMI_VERSION} ${PHP_REMI_VERSION}-php ${PHP_REMI_VERSION}-php-pgsql ${PHP_REMI_VERSION}-php-mysqlnd"
@@ -19,9 +19,9 @@ PHP5="${PHP_REMI_VERSION}-php-opcache ${PHP_REMI_VERSION}-php-pecl-memcache ${PH
 PHP6="${PHP_REMI_VERSION}-php-intl ${PHP_REMI_VERSION}-php-mbstring ${PHP_REMI_VERSION}-php-pecl-solr2"
 PHP7="${PHP_REMI_VERSION}-php-pecl-zip ${PHP_REMI_VERSION}-php-soap"
 
-#PHP_MS_ORACLE_PACKAGES="freetds mssql-tools"
+PHP_MSSQL_PACKAGES="freetds mssql-tools"
 
-PHP_PACKAGES="${PHP1} ${PHP2} ${PHP3} ${PHP4} ${PHP5} ${PHP6} ${PHP7}";
+PHP_PACKAGES="${PHP1} ${PHP2} ${PHP3} ${PHP4} ${PHP5} ${PHP6} ${PHP7} ${PHP_MSSQL_PACKAGES}";
 INSTALL_PKGS="${INSTALL_PKGS2} ${PHP_PACKAGES}";
 
 MOODLE="moodle";
