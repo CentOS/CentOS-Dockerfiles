@@ -19,7 +19,8 @@ PHP5="${PHP_REMI_VERSION}-php-opcache ${PHP_REMI_VERSION}-php-pecl-memcache ${PH
 PHP6="${PHP_REMI_VERSION}-php-intl ${PHP_REMI_VERSION}-php-mbstring ${PHP_REMI_VERSION}-php-pecl-solr2"
 PHP7="${PHP_REMI_VERSION}-php-pecl-zip ${PHP_REMI_VERSION}-php-soap"
 
-PHP_MSSQL_PACKAGES="freetds mssql-tools"
+PHP_MSSQL_PACKAGES="mssql-tools ${PHP_REMI_VERSION}-php-sqlsrv"
+PHP_ORACLE_PACKAGES=""
 
 PHP_PACKAGES="${PHP1} ${PHP2} ${PHP3} ${PHP4} ${PHP5} ${PHP6} ${PHP7} ${PHP_MSSQL_PACKAGES}";
 INSTALL_PKGS="${INSTALL_PKGS2} ${PHP_PACKAGES}";
@@ -47,7 +48,7 @@ yum -y install epel-release && yum -y install ${REMI_REPO} && yum -y install --s
 # Install moodle
 pushd /var/www;
 wget ${MOODLE_DOWNLOAD_URL} && tar zxvf ${MOODLE_TAR} && mv /var/www/${MOODLE}/* /var/www/html;
-mkdir -p /var/moodledata && rm -rf ${MOODLE_TAR}
+mkdir -p /var/moodledata && rm -rf ${MOODLE_TAR};
 popd;
 
 # Fixup Configurations
