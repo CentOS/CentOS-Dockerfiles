@@ -22,3 +22,4 @@ USER apache
 
 ENTRYPOINT ["/opt/scripts/run.sh"]
 CMD ["moodle"]
+

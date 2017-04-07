@@ -13,7 +13,7 @@ PHP_REMI_VERSION="${PHP_REMI_VERSION:-"php71"}"
 
 PHP1="${PHP_REMI_VERSION} ${PHP_REMI_VERSION}-php ${PHP_REMI_VERSION}-php-pgsql ${PHP_REMI_VERSION}-php-mysqlnd"
 PHP2="${PHP_REMI_VERSION}-php-pecl-mysql ${PHP_REMI_VERSION}-php-xml ${PHP_REMI_VERSION}-php-xmlrpc "
-PHP3="${PHP_REMI_VERSION}-php-gd ${PHP_REMI_VERSION}-php-pecl-mongodb ${PHP_REMI_VERSION}php-pecl-apcu"
+PHP3="${PHP_REMI_VERSION}-php-gd ${PHP_REMI_VERSION}-php-pecl-mongodb ${PHP_REMI_VERSION}-php-pecl-apcu"
 PHP4="${PHP_REMI_VERSION}-php-pecl-apcu-bc ${PHP_REMI_VERSION}-php-pecl-redis ${PHP_REMI_VERSION}-php-phpiredis"
 PHP5="${PHP_REMI_VERSION}-php-opcache ${PHP_REMI_VERSION}-php-pecl-memcache ${PHP_REMI_VERSION}-php-pecl-memcached"
 PHP6="${PHP_REMI_VERSION}-php-intl ${PHP_REMI_VERSION}-php-mbstring ${PHP_REMI_VERSION}-php-pecl-solr2"
@@ -67,3 +67,4 @@ chmod -R 777 /etc/httpd/logs;
 
 # Cleanup
 yum -y remove ${INSTALL_PKGS1} && yum clean all
+

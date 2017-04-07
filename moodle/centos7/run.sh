@@ -37,3 +37,4 @@ if [ $1 == "moodle" ]; then
 else
     exec $@
 fi
+

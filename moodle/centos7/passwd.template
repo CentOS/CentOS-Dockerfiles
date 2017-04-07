@@ -12,3 +12,4 @@ games:x:12:100:games:/usr/games:/sbin/nologin
 ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
 nobody:x:99:99:Nobody:/:/sbin/nologin
 apache:x:${USER_ID}:${GROUP_ID}:Apache User:${HOME}:/bin/bash
+
