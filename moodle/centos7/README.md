@@ -29,7 +29,7 @@ You can customize parts of moodle by passing certain values as environment varia
  3. DB_NAME - The name of the moodle database in the DB. This assumes the database has already been setup with appropriate users and permissions.
  4. DB_USER - The username of the user who has permissions on DB_NAME in DB_HOST. 
  5. DB_PASSWD - The password of DB_USER.
- 6. MOODLE_URL - The URL of moodle endpoint. This should include the the protocol and port, if any (unless your URL is internally mapped to port 8080 of container as can be done with openshift routes). Default value will be http://containerip:8080.
+ 6. MOODLE_URL - The URL of moodle endpoint. This should include the the protocol and port, if any (unless your URL is internally mapped to port 8080 of container as can be done with openshift routes). Default value will be http:\/\/containerip:8080. **Please ensure you escape any such slashes in your own hostname as it will be internally passed to a `sed` command to update the config.php**
 
 ### Notes:
 

@@ -15,7 +15,7 @@ DB_HOST=${DB_HOST:-"localhost"};
 DB_NAME=${DB_NAME:-"moodle"};
 DB_USER=${DB_USER:-"moodle"};
 DB_PASSWD=${DB_PASSWD:-"moodle"};
-MOODLE_URL=${MOODLE_URL:-"http://`hostname -i`:8080"}
+MOODLE_URL=${MOODLE_URL:-"http:\/\/`hostname -i`:8080"}
 
 # Main Begins
 
