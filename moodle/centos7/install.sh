@@ -19,7 +19,7 @@ PHP5="${PHP_REMI_VERSION}-php-opcache ${PHP_REMI_VERSION}-php-pecl-memcache ${PH
 PHP6="${PHP_REMI_VERSION}-php-intl ${PHP_REMI_VERSION}-php-mbstring ${PHP_REMI_VERSION}-php-pecl-solr2"
 PHP7="${PHP_REMI_VERSION}-php-pecl-zip ${PHP_REMI_VERSION}-php-soap"
 
-PHP_MSSQL_PACKAGES="mssql-tools ${PHP_REMI_VERSION}-php-sqlsrv"
+PHP_MSSQL_PACKAGES="${PHP_REMI_VERSION}-php-sqlsrv"
 PHP_ORACLE_PACKAGES=""
 
 PHP_PACKAGES="${PHP1} ${PHP2} ${PHP3} ${PHP4} ${PHP5} ${PHP6} ${PHP7} ${PHP_MSSQL_PACKAGES}";
