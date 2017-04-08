@@ -31,6 +31,12 @@ You can customize parts of moodle by passing certain values as environment varia
  5. DB_PASSWD - The password of DB_USER.
  6. MOODLE_URL - The URL of moodle endpoint. This should include the the protocol and port, if any (unless your URL is internally mapped to port 8080 of container as can be done with openshift routes). Default value will be http:\/\/containerip:8080. **Please ensure you escape any such slashes in your own hostname as it will be internally passed to a `sed` command to update the config.php. Its compulsory to either have http or https preceeding this URL.**
 
+### Tracking Updates:
+
+ 1. **PHP** : PHP updates can be tracked in remicolt repository.
+ 2. **Moodle** : For moodle, we will have track releases on from download.moodle.org or even on release
+    monitoring (https://release-monitoring.org/project/6384/)
+
 ### Notes:
 
  1. For users of selinux based systems, if you try to volume mount, you might have permission issues even if you do `-v /somepath:/var/moodledata:rw`. You can get more information about that [here](http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/ "SELinux with docker volumes").
