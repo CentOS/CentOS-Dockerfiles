@@ -8,7 +8,7 @@ Setup
 
 To build the image
 
-    # docker build --rm -t <yourname/postgresql .
+    # docker build --rm -t <yourname>/postgresql .
 
 
 Launching PostgreSQL
