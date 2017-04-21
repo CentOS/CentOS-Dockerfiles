@@ -56,6 +56,8 @@ rm -rf ${HTTPD_WELCOME};
 sed -i 's/^Listen 80/Listen 8080\\\nListen 8443/g' ${HTTPD_CONF};
 sed -i 's/^Listen 8080\\/Listen 8080/g' ${HTTPD_CONF};
 sed -i 's/^Group apache/Group root/g' ${HTTPD_CONF};
+sed -i 's/logs\/error_log/\/dev\/stderr/g' ${HTTPD_CONF};
+sed -i 's/logs\/access_log/\/dev\/stdout/g' ${HTTPD_CONF};
 mkdir -p /etc/httpd/logs && touch /etc/httpd/logs/error_log && touch /etc/httpd/logs/access_log;
 
 # Fix the permissions
