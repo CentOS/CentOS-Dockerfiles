@@ -33,7 +33,7 @@ if [ $1 == "moodle" ]; then
     s/localhost/${DB_HOST}/
     s/\/home\/example\/moodledata/\/var\/moodledata/" /var/www/html/config-dist.php > /var/www/html/config.php;
 
-    exec /usr/sbin/httpd -DFOREGROUND;
+    /usr/sbin/httpd && tail -f /var/log/httpd/*;
 else
     exec $@
 fi
