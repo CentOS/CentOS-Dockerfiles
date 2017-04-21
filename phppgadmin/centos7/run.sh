@@ -13,7 +13,7 @@ POSTGRESQL_SERVER=${POSTGRESQL_SERVER:-"localhost"}
 sed -i "s/conf\['servers'\]\[0\]\['host'\] = '.*'/conf\['servers'\]\[0\]\['host'\] = '${POSTGRESQL_SERVER}'/g" ${PHP_PG_ADMIN_CONFIG};
 
 if [ $1 == "phppgadmin" ]; then
-    exec /usr/sbin/httpd -DFOREGROUND;
+    /usr/sbin/httpd && tail -f /var/log/httpd/*;
 else
     exec $1
 fi
