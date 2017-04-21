@@ -38,7 +38,7 @@ Alias /phpPgAdmin /usr/share/phpPgAdmin
 EOF
 
 # Fix the permissions
-for item in "/etc/httpd" "/var/www" "/usr/share/phpPgAdmin" "/etc/phpPgAdmin"; do
+for item in "/etc/httpd" "/var/www" "/usr/share/phpPgAdmin" "/etc/phpPgAdmin" "/var/lib/php"; do
     . /opt/scripts/fix-permissions.sh ${item} apache;
 done
 
