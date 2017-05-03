@@ -1,0 +1,49 @@
+{
+
+  "host": "0.0.0.0",
+  "port": 7777,
+
+  "keyLength": ${KEY_LENGTH},
+
+  "maxLength": ${MAX_LENGTH},
+
+  "staticMaxAge": ${STATIC_MAX_AGE},
+
+  "recompressStaticAssets": true,
+
+  "logging": [
+    {
+      "level": "verbose",
+      "type": "Console",
+      "colorize": true
+    }
+  ],
+
+  "keyGenerator": {
+    "type": "${KEY_TYPE}"
+  },
+
+  "rateLimits": {
+    "categories": {
+      "normal": {
+        "totalRequests": 500,
+        "every": 60000
+      }
+    }
+  },
+
+  "storage": {
+    "type": "${STORAGE_TYPE}",
+    "host": "${STORAGE_HOST}",
+    "port": ${STORAGE_PORT},
+    "db": ${STORAGE_DB},
+    "path": "${STORAGE_FILE_PATH}",
+    "expire": ${STORAGE_EXPIRE},
+    "connectionUrl": "${DATABASE_URL}"
+  },
+
+  "documents": {
+    "about": "./about.md"
+  }
+
+}
