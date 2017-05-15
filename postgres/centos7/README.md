@@ -37,6 +37,16 @@ You can create a postgresql superuser at launch by specifying `DB_USER` and
     -e 'DB_NAME=my_database' \
     <yourname>/postgresql
 
+If you want to create more than one database, state your databases in `DB_NAME` each delimited by semicolon:
+
+    docker run --name postgresql -d \
+    -e 'DB_USER=username' \
+    -e 'DB_PASS=ridiculously-complex_password1' \
+    -e 'DB_NAME=my_database;another_database' \
+    <yourname>/postgresql
+
+User specified by `DB_USER` will have granted permissions to all provided databases.
+
 To connect to your database with your newly created user:
 
     psql -U username -h $(docker inspect --format {{.NetworkSettings.IPAddress}} postgresql)
