@@ -28,14 +28,25 @@ To connect to the container as the administrative `postgres` user:
 Creating a database at launch
 -----------------------------
 
-You can create a postgresql superuser at launch by specifying `DB_USER` and
-`DB_PASS` variables. You may also create a database by using `DB_NAME`. 
+You can create a postgresql superuser at launch by specifying `POSTGRES_USER` and
+`POSGRES_PASSWORD` variables. You may also create a database by using `POSTGRES_DB`. 
 
     docker run --name postgresql -d \
-    -e 'DB_USER=username' \
-    -e 'DB_PASS=ridiculously-complex_password1' \
-    -e 'DB_NAME=my_database' \
+    -e 'POSTGRES_USER=username' \
+    -e 'POSTGRES_PASSWORD=ridiculously-complex_password1' \
+    -e 'POSTGRES_DB=my_database' \
     <yourname>/postgresql
+
+If you want to create more than one database, state your databases in
+`POSTGRES_DB` each delimited by a semicolon:
+
+    docker run --name postgresql -d \
+    -e 'POSTGRES_USER=username' \
+    -e 'POSTGRES_PASSWORD=ridiculously-complex_password1' \
+    -e 'POSTGRES_DB=my_database;another_database' \
+    <yourname>/postgresql
+
+User specified by `POSTGRES_USER` will have granted permissions to all provided databases.
 
 To connect to your database with your newly created user:
 

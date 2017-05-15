@@ -27,17 +27,19 @@ if [ -n "${DB_USER}" ]; then
 fi
 
 if [ -n "${DB_NAME}" ]; then
-  echo "Creating database \"${DB_NAME}\"..."
-  echo "CREATE DATABASE ${DB_NAME};" | \
-    sudo -u postgres -H postgres --single \
-     -c config_file=${PG_CONFDIR}/postgresql.conf -D ${PG_CONFDIR}
-
-  if [ -n "${DB_USER}" ]; then
-    echo "Granting access to database \"${DB_NAME}\" for user \"${DB_USER}\"..."
-    echo "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} to ${DB_USER};" |
+  for database in ${DB_NAME//;/ }; do
+    echo "Creating database \"${database}\"..."
+    echo "CREATE DATABASE ${database};" | \
       sudo -u postgres -H postgres --single \
-      -c config_file=${PG_CONFDIR}/postgresql.conf -D ${PG_CONFDIR}
-  fi
+       -c config_file=${PG_CONFDIR}/postgresql.conf -D ${PG_CONFDIR}
+
+    if [ -n "${DB_USER}" ]; then
+      echo "Granting access to database \"${database}\" for user \"${DB_USER}\"..."
+      echo "GRANT ALL PRIVILEGES ON DATABASE ${database} to ${DB_USER};" |
+        sudo -u postgres -H postgres --single \
+        -c config_file=${PG_CONFDIR}/postgresql.conf -D ${PG_CONFDIR}
+    fi
+  done
 fi
 }
 
