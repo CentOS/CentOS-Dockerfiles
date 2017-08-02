@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source /etc/kubernetes/kubelet
-source /etc/kubernetes/config
+[ -f /etc/kubernetes/kubelet ] && source /etc/kubernetes/kubelet
+[ -f /etc/kubernetes/config ] && source /etc/kubernetes/config
 
 TEMP_KUBELET_ARGS='--cgroup-driver=systemd --cgroups-per-qos=false --enforce-node-allocatable='
 
