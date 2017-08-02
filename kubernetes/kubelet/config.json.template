@@ -1,0 +1,391 @@
+{
+    "ociVersion": "1.0.0",
+    "platform": {
+        "os": "linux",
+        "arch": "amd64"
+    },
+    "process": {
+        "terminal": false,
+        "user": {},
+        "args": [
+            "/usr/bin/kubelet-docker.sh"
+        ],
+        "env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "TERM=xterm"
+        ],
+        "noNewPrivileges": false,
+        "cwd": "/",
+        "capabilities": {
+            "bounding": [
+                "CAP_CHOWN",
+                "CAP_DAC_OVERRIDE",
+                "CAP_DAC_READ_SEARCH",
+                "CAP_FOWNER",
+                "CAP_FSETID",
+                "CAP_KILL",
+                "CAP_SETGID",
+                "CAP_SETUID",
+                "CAP_SETPCAP",
+                "CAP_LINUX_IMMUTABLE",
+                "CAP_NET_BIND_SERVICE",
+                "CAP_NET_BROADCAST",
+                "CAP_NET_ADMIN",
+                "CAP_NET_RAW",
+                "CAP_IPC_LOCK",
+                "CAP_IPC_OWNER",
+                "CAP_SYS_MODULE",
+                "CAP_SYS_RAWIO",
+                "CAP_SYS_CHROOT",
+                "CAP_SYS_PTRACE",
+                "CAP_SYS_PACCT",
+                "CAP_SYS_ADMIN",
+                "CAP_SYS_BOOT",
+                "CAP_SYS_NICE",
+                "CAP_SYS_RESOURCE",
+                "CAP_SYS_TIME",
+                "CAP_SYS_TTY_CONFIG",
+                "CAP_MKNOD",
+                "CAP_LEASE",
+                "CAP_AUDIT_WRITE",
+                "CAP_AUDIT_CONTROL",
+                "CAP_SETFCAP",
+                "CAP_MAC_OVERRIDE",
+                "CAP_MAC_ADMIN",
+                "CAP_SYSLOG",
+                "CAP_WAKE_ALARM",
+                "CAP_BLOCK_SUSPEND"
+            ],
+            "permitted": [
+                "CAP_CHOWN",
+                "CAP_DAC_OVERRIDE",
+                "CAP_DAC_READ_SEARCH",
+                "CAP_FOWNER",
+                "CAP_FSETID",
+                "CAP_KILL",
+                "CAP_SETGID",
+                "CAP_SETUID",
+                "CAP_SETPCAP",
+                "CAP_LINUX_IMMUTABLE",
+                "CAP_NET_BIND_SERVICE",
+                "CAP_NET_BROADCAST",
+                "CAP_NET_ADMIN",
+                "CAP_NET_RAW",
+                "CAP_IPC_LOCK",
+                "CAP_IPC_OWNER",
+                "CAP_SYS_MODULE",
+                "CAP_SYS_RAWIO",
+                "CAP_SYS_CHROOT",
+                "CAP_SYS_PTRACE",
+                "CAP_SYS_PACCT",
+                "CAP_SYS_ADMIN",
+                "CAP_SYS_BOOT",
+                "CAP_SYS_NICE",
+                "CAP_SYS_RESOURCE",
+                "CAP_SYS_TIME",
+                "CAP_SYS_TTY_CONFIG",
+                "CAP_MKNOD",
+                "CAP_LEASE",
+                "CAP_AUDIT_WRITE",
+                "CAP_AUDIT_CONTROL",
+                "CAP_SETFCAP",
+                "CAP_MAC_OVERRIDE",
+                "CAP_MAC_ADMIN",
+                "CAP_SYSLOG",
+                "CAP_WAKE_ALARM",
+                "CAP_BLOCK_SUSPEND"
+            ],
+            "inheritable": [
+                "CAP_CHOWN",
+                "CAP_DAC_OVERRIDE",
+                "CAP_DAC_READ_SEARCH",
+                "CAP_FOWNER",
+                "CAP_FSETID",
+                "CAP_KILL",
+                "CAP_SETGID",
+                "CAP_SETUID",
+                "CAP_SETPCAP",
+                "CAP_LINUX_IMMUTABLE",
+                "CAP_NET_BIND_SERVICE",
+                "CAP_NET_BROADCAST",
+                "CAP_NET_ADMIN",
+                "CAP_NET_RAW",
+                "CAP_IPC_LOCK",
+                "CAP_IPC_OWNER",
+                "CAP_SYS_MODULE",
+                "CAP_SYS_RAWIO",
+                "CAP_SYS_CHROOT",
+                "CAP_SYS_PTRACE",
+                "CAP_SYS_PACCT",
+                "CAP_SYS_ADMIN",
+                "CAP_SYS_BOOT",
+                "CAP_SYS_NICE",
+                "CAP_SYS_RESOURCE",
+                "CAP_SYS_TIME",
+                "CAP_SYS_TTY_CONFIG",
+                "CAP_MKNOD",
+                "CAP_LEASE",
+                "CAP_AUDIT_WRITE",
+                "CAP_AUDIT_CONTROL",
+                "CAP_SETFCAP",
+                "CAP_MAC_OVERRIDE",
+                "CAP_MAC_ADMIN",
+                "CAP_SYSLOG",
+                "CAP_WAKE_ALARM",
+                "CAP_BLOCK_SUSPEND"
+            ],
+            "effective": [
+                "CAP_CHOWN",
+                "CAP_DAC_OVERRIDE",
+                "CAP_DAC_READ_SEARCH",
+                "CAP_FOWNER",
+                "CAP_FSETID",
+                "CAP_KILL",
+                "CAP_SETGID",
+                "CAP_SETUID",
+                "CAP_SETPCAP",
+                "CAP_LINUX_IMMUTABLE",
+                "CAP_NET_BIND_SERVICE",
+                "CAP_NET_BROADCAST",
+                "CAP_NET_ADMIN",
+                "CAP_NET_RAW",
+                "CAP_IPC_LOCK",
+                "CAP_IPC_OWNER",
+                "CAP_SYS_MODULE",
+                "CAP_SYS_RAWIO",
+                "CAP_SYS_CHROOT",
+                "CAP_SYS_PTRACE",
+                "CAP_SYS_PACCT",
+                "CAP_SYS_ADMIN",
+                "CAP_SYS_BOOT",
+                "CAP_SYS_NICE",
+                "CAP_SYS_RESOURCE",
+                "CAP_SYS_TIME",
+                "CAP_SYS_TTY_CONFIG",
+                "CAP_MKNOD",
+                "CAP_LEASE",
+                "CAP_AUDIT_WRITE",
+                "CAP_AUDIT_CONTROL",
+                "CAP_SETFCAP",
+                "CAP_MAC_OVERRIDE",
+                "CAP_MAC_ADMIN",
+                "CAP_SYSLOG",
+                "CAP_WAKE_ALARM",
+                "CAP_BLOCK_SUSPEND"
+            ],
+            "ambient": [
+                "CAP_CHOWN",
+                "CAP_DAC_OVERRIDE",
+                "CAP_DAC_READ_SEARCH",
+                "CAP_FOWNER",
+                "CAP_FSETID",
+                "CAP_KILL",
+                "CAP_SETGID",
+                "CAP_SETUID",
+                "CAP_SETPCAP",
+                "CAP_LINUX_IMMUTABLE",
+                "CAP_NET_BIND_SERVICE",
+                "CAP_NET_BROADCAST",
+                "CAP_NET_ADMIN",
+                "CAP_NET_RAW",
+                "CAP_IPC_LOCK",
+                "CAP_IPC_OWNER",
+                "CAP_SYS_MODULE",
+                "CAP_SYS_RAWIO",
+                "CAP_SYS_CHROOT",
+                "CAP_SYS_PTRACE",
+                "CAP_SYS_PACCT",
+                "CAP_SYS_ADMIN",
+                "CAP_SYS_BOOT",
+                "CAP_SYS_NICE",
+                "CAP_SYS_RESOURCE",
+                "CAP_SYS_TIME",
+                "CAP_SYS_TTY_CONFIG",
+                "CAP_MKNOD",
+                "CAP_LEASE",
+                "CAP_AUDIT_WRITE",
+                "CAP_AUDIT_CONTROL",
+                "CAP_SETFCAP",
+                "CAP_MAC_OVERRIDE",
+                "CAP_MAC_ADMIN",
+                "CAP_SYSLOG",
+                "CAP_WAKE_ALARM",
+                "CAP_BLOCK_SUSPEND"
+            ]
+        },
+        "rlimits": [
+            {
+                "type": "RLIMIT_NOFILE",
+                "hard": 1024,
+                "soft": 1024
+            }
+        ]
+    },
+    "root": {
+        "path": "rootfs",
+        "readonly": true
+    },
+    "mounts": [
+        {
+            "destination": "/proc",
+            "type": "proc",
+            "source": "proc"
+        },
+        {
+            "source": "/dev",
+            "destination": "/dev",
+            "type": "bind",
+            "options": [
+                "rbind",
+                "rslave"
+            ]
+        },
+        {
+            "destination": "/dev/pts",
+            "type": "devpts",
+            "source": "devpts",
+            "options": [
+                "nosuid",
+                "noexec",
+                "newinstance",
+                "ptmxmode=0666",
+                "mode=0620",
+                "gid=5"
+            ]
+        },
+        {
+            "destination": "/dev/shm",
+            "type": "tmpfs",
+            "source": "shm",
+            "options": [
+                "nosuid",
+                "noexec",
+                "nodev",
+                "mode=1777",
+                "size=65536k"
+            ]
+        },
+        {
+            "destination": "/sys",
+            "type": "sysfs",
+            "source": "sysfs",
+            "options": [
+                "nosuid",
+                "noexec",
+                "nodev"
+            ]
+        },
+        {
+            "destination": "/sys/fs/cgroup",
+            "type": "cgroup",
+            "source": "cgroup",
+            "options": [
+                "nosuid",
+                "noexec",
+                "nodev",
+                "relatime",
+                "ro"
+            ]
+        },
+        {
+            "type": "bind",
+            "source": "/etc/kubernetes",
+            "destination": "/etc/kubernetes",
+            "options": [
+                "rbind",
+                "ro",
+                "rprivate"
+            ]
+         },
+         {
+            "destination": "/etc/resolv.conf",
+            "type": "bind",
+            "source": "/etc/resolv.conf",
+            "options": [
+                "ro",
+                "rbind",
+                "rprivate"
+             ]
+          },
+          {
+            "type": "bind",
+            "source": "/",
+            "destination": "/rootfs",
+            "options": [
+                "rbind",
+                "rslave",
+                "ro"
+             ]
+          },
+          {
+            "type": "bind",
+            "source": "/var/run/",
+            "destination": "/var/run/",
+            "options": [
+                "rbind",
+                "rw",
+                "mode=755"
+             ]
+          },
+          {
+            "type": "bind",
+            "source": "/run",
+            "destination": "/run",
+            "options": [
+                "rbind",
+                "rw",
+                "mode=755"
+             ]
+          },
+          {
+            "type": "bind",
+            "source": "/var/lib",
+            "destination": "/var/lib",
+            "options": [
+                "bind",
+                "rw",
+                "mode=755"
+             ]
+          },
+          {
+            "type": "bind",
+            "source": "/var/lib/kubelet",
+            "destination": "/var/lib/kubelet",
+            "options": [
+                "rbind",
+                "rslave",
+                "rw",
+                "mode=755"
+             ]
+          },
+          {
+            "type": "bind",
+            "source": "/var/log",
+            "destination": "/var/log",
+            "options": [
+                "bind",
+                "rw",
+                "mode=755"
+             ]
+          }
+    ],
+    "linux": {
+        "rootfsPropagation": "rslave",
+        "resources": {
+            "devices": [
+                {
+                    "allow": true,
+                    "access": "rwm"
+                }
+            ]
+        },
+        "namespaces": [
+            {
+                "type": "mount"
+            }
+        ],
+        "devices": null,
+        "apparmorProfile": "",
+        "selinuxProcessLabel": ""
+    }
+}

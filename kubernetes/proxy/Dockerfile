@@ -7,5 +7,9 @@ LABEL RUN='/usr/bin/docker run -d --net=host --privileged ${OPT1} --name ${NAME}
 
 COPY launch.sh /usr/bin/kube-proxy-docker.sh
 
+COPY service.template config.json.template /exports/
+
+RUN mkdir -p /exports/hostfs/etc/kubernetes && cp /etc/kubernetes/{config,proxy} /exports/hostfs/etc/kubernetes
+
 ENTRYPOINT ["/usr/bin/kube-proxy-docker.sh"]
 

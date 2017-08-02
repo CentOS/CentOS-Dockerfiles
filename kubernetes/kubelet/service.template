@@ -1,0 +1,13 @@
+[Unit]
+Description=kubernetes-kubelet
+After=docker.service
+
+[Service]
+ExecStart=$EXEC_START
+ExecStop=$EXEC_STOP
+Restart=on-failure
+WorkingDirectory=$DESTDIR
+
+[Install]
+WantedBy=multi-user.target
+
