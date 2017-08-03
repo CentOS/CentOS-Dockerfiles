@@ -4,4 +4,4 @@ baseurl=http://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
 enabled=0
 gpgcheck=0
 # See CentOS-extras.repo - change that first, then make this match.
-#exclude=
+exclude=docker
