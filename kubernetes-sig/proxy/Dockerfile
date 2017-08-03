@@ -1,4 +1,4 @@
-FROM centos/kubernetes-node
+FROM centos/kubernetes-sig-node
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 RUN yum install -y iptables conntrack-tools && yum clean all

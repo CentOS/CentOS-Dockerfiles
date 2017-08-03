@@ -1,4 +1,4 @@
-FROM centos/kubernetes-node
+FROM centos/kubernetes-sig-node
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 # NOTE: kubelet wants pidof (from sysvinit-tools), but it can't use it
