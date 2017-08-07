@@ -33,6 +33,13 @@ if [ "$1" = 'mysqld_safe' ]; then
 		
 		if [ "$MYSQL_DATABASE" ]; then
 			echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;" >> "$tempSqlFile"
+			if [ "$MYSQL_CHARSET" ]; then
+				echo "ALTER DATABASE \`$MYSQL_DATABASE\` CHARACTER SET \`$MYSQL_CHARSET\` ;" >> "$tempSqlFile"
+			fi
+			
+			if [ "$MYSQL_COLLATION" ]; then
+				echo "ALTER DATABASE \`$MYSQL_DATABASE\` COLLATE \`$MYSQL_COLLATION\` ;" >> "$tempSqlFile"
+			fi
 		fi
 		
 		if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then

@@ -43,6 +43,7 @@ And now create the daemonized mariadb container:
     # docker run --name=mariadb -d -p 3306:3306 --volumes-from=mariadb-data -e MYSQL_ROOT_PASSWORD=<password> <yourname>/mariadb55
 
 You could also create an additional database by passing MYSQL_DATABASE and/or create an additional user passing MYSQL_USER to the container.
+You can specify database character set and/or collation by specifying MYSQL_CHARSET and/or MYSQL_COLLATION!
 
 Using your MariaDB container
 ----------------------------
