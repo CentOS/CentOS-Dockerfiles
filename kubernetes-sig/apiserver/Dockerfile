@@ -3,7 +3,7 @@ MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
 COPY launch.sh /usr/bin/kube-apiserver-docker.sh
 
-COPY service.template config.json.template /exports/
+COPY service.template config.json.template tmpfiles.template /exports/
 
 RUN chmod +x /usr/bin/kube-apiserver
 

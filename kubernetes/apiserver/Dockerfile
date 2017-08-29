@@ -5,7 +5,7 @@ COPY launch.sh /usr/bin/kube-apiserver-docker.sh
 
 LABEL RUN /usr/bin/docker/ run -d --net=host -p 443:443
 
-COPY service.template config.json.template /exports/
+COPY service.template config.json.template tmpfiles.template /exports/
 
 RUN chmod +x /usr/bin/kube-apiserver
 
