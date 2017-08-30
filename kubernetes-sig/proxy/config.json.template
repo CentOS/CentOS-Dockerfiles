@@ -7,8 +7,8 @@
     "process": {
         "terminal": false,
         "user": {
-            "uid": 994,
-            "gid": 996
+            "uid": 996,
+            "gid": 994
         },
         "args": [
             "/usr/bin/kube-proxy-docker.sh"
