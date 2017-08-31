@@ -7,8 +7,8 @@
     "process": {
         "terminal": false,
         "user": {
-            "uid": 994,
-            "gid": 996
+            "uid": 996,
+            "gid": 994
         },
         "args": [
             "/usr/bin/kube-apiserver-docker.sh"
@@ -155,7 +155,16 @@
                 "rbind",
                 "rprivate"
              ]
-          }
+          },
+          {
+             "destination": "/var/run/kubernetes",
+             "type": "bind",
+             "source": "/var/run/kubernetes",
+             "options": [
+                 "rw",
+                 "rbind"
+              ]
+           }
     ],
     "linux": {
         "resources": {
