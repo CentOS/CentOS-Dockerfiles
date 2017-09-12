@@ -19,6 +19,9 @@ if [ "$1" = 'mysqld_safe' ]; then
 		mysql_install_db --datadir="$DATADIR"
 		echo 'Finished mysql_install_db'
 		
+		# Setup a default mysql connection command.
+		mysql=( mysql --protocol=socket -uroot )
+		
 		# These statements _must_ be on individual lines, and _must_ end with
 		# semicolons (no line breaks or comments are permitted).
 		# TODO proper SQL escaping on ALL the things D:
@@ -31,8 +34,13 @@ if [ "$1" = 'mysqld_safe' ]; then
 			DROP DATABASE IF EXISTS test ;
 		EOSQL
 		
+		if [ ! -z "$MYSQL_ROOT_PASSWORD" ]; then
+			mysql+=( -p"${MYSQL_ROOT_PASSWORD}" )
+		fi
+		
 		if [ "$MYSQL_DATABASE" ]; then
 			echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;" >> "$tempSqlFile"
+			mysql+=( " $MYSQL_DATABASE" )
 		fi
 		
 		if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
@@ -46,6 +54,17 @@ if [ "$1" = 'mysqld_safe' ]; then
 		echo 'FLUSH PRIVILEGES ;' >> "$tempSqlFile"
 		
 		set -- "$@" --init-file="$tempSqlFile"
+
+		echo
+		for f in /docker-entrypoint-initdb.d/*; do
+			case "$f" in
+				*.sh)     echo "$0: running $f"; . "$f" ;;
+				*.sql)    echo "$0: running $f"; "${mysql[@]}" < "$f"; echo ;;
+				*.sql.gz) echo "$0: running $f"; gunzip -c "$f" | "${mysql[@]}"; echo ;;
+				*)        echo "$0: ignoring $f" ;;
+			esac
+			echo
+		done
 	fi
 	
 fi

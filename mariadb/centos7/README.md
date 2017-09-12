@@ -44,6 +44,10 @@ And now create the daemonized mariadb container:
 
 You could also create an additional database by passing MYSQL_DATABASE and/or create an additional user passing MYSQL_USER to the container.
 
+## Initializing a fresh instance
+
+When a container is started for the first time, a new database will be initialized with the provided configuration variables. Furthermore, it will execute files with extensions `.sh` and `.sql` that are found in `/docker-entrypoint-initdb.d`. You can easily populate your mysql services by [mounting a SQL dump into that directory](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-file-as-a-data-volume) and provide [custom images](https://docs.docker.com/reference/builder/) with contributed data.
+
 Using your MariaDB container
 ----------------------------
 
