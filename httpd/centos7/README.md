@@ -16,13 +16,13 @@ Copy the sources down and do the build
 To run (if port 8080 is available and open on your host):
 
 ```
-# docker run -d -p 8080:8080 <username>/httpd
+# docker run -d -p 8080:80 <username>/httpd
 ```
 
 or to assign a random port that maps to port 80 on the container:
 
 ```
-# docker run -d -p 8080 <username>/httpd
+# docker run -d -p 80 <username>/httpd
 ```
 
 To the port that the container is listening on:
