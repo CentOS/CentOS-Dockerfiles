@@ -1,0 +1,6 @@
+---
+job-id: sentry
+test-skip: false
+build-script: build.sh
+test-script: test.sh
+delivery-script: delivery.sh
