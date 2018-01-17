@@ -6,7 +6,7 @@ The container was created as a base container for systemd based services. There 
 
 Here we show you how we can create a sample httpd container.
 
-Frist create a Dockerfile and setup the required service or services. Systemd can launch multiple services.
+First create a Dockerfile and setup the required service or services. Systemd can launch multiple services.
 
 ```
 FROM centos/systemd
