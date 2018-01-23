@@ -223,10 +223,22 @@ SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
 # Uploaded media uses these `filestore` settings. The available
 # backends are either `filesystem` or `s3`.
 
-SENTRY_OPTIONS['filestore.backend'] = 'filesystem'
-SENTRY_OPTIONS['filestore.options'] = {
-    'location': env('SENTRY_FILESTORE_DIR'),
-}
+filestorehost = env('SENTRY_FILE_HOST')
+if filestorehost:
+     SENTRY_OPTIONS['filestore.backend'] = 's3'
+     SENTRY_OPTIONS['filestore.options'] = {
+          'access_key': env('SENTRY_FILE_ACCESS'),
+          'secret_key': env('SENTRY_FILE_SECRET'),
+          'bucket_name': env('SENTRY_FILE_BUCKET'),
+          'endpoint_url': filestorehost
+     }
+
+filestoredir = env('SENTRY_FILESTORE_DIR')
+if filestoredir and not filestorehost:
+     SENTRY_OPTIONS['filestore.backend'] = 'filesystem'
+     SENTRY_OPTIONS['filestore.options'] = {
+          'location': filestoredir
+     }
 
 ##############
 # Web Server #
