@@ -54,6 +54,8 @@ RUN set -x \
 RUN set -x \
     && yum update -y && yum install -y make && yum clean all \
     && pip install librabbitmq==1.6.1 \
+    && pip install https://github.com/getsentry/sentry-auth-github/archive/master.zip \
+    && pip install https://github.com/getsentry/sentry-auth-google/archive/master.zip \
     && python -c 'import librabbitmq' \
     && yum remove -y make
 

@@ -1,4 +1,4 @@
-FROM registry.centos.org/centos7/sentry:8.22
+FROM registry.centos.org/centos7/sentry:8.22-sso
 
 WORKDIR /usr/src/sentry
 
