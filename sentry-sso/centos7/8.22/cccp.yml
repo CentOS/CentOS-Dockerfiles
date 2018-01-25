@@ -1,5 +1,5 @@
 ---
-job-id: sentry
+job-id: sentry-sso
 test-skip: false
 build-script: build.sh
 test-script: test.sh
