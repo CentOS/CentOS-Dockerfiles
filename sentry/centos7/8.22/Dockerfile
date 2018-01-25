@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos/centos:latest
 
 # add our user and group first to make sure their IDs get assigned consistently
 RUN groupadd -r sentry && useradd -r -m -g sentry sentry
