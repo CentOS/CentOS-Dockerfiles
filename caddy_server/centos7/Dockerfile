@@ -1,13 +1,13 @@
 FROM centos:7
-MAINTAINER Mohammed Zeeshan Ahmed <moahmed@redhat.com>
-LABEL VERSION="0.9.5" ARCHITECTURE="amd64"
+LABEL maintainer="Mohammed Zeeshan Ahmed <moahmed@redhat.com>"
+LABEL VERSION="0.10.10" ARCHITECTURE="amd64"
 RUN yum -y update && yum clean all
-ARG plugins=DNS%2Cawslambda%2Ccors%2Cexpires%2Cfilemanager%2Cgit%2Chugo%2Cipfilter%2Cjsonp%2Cjwt%2Clocale%2Cmailout%2Cminify%2Cmultipass%2Cprometheus%2Cratelimit%2Crealip%2Csearch%2Cupload%2Ccloudflare%2Cdigitalocean%2Cdnsimple%2Cdyn%2Cgandi%2Cgooglecloud%2Clinode%2Cnamecheap%2Crfc2136%2Croute53%2Cvultr
+ARG plugins=dns,dyndns,hook.service,http.authz,http.awses,http.awslambda,http.cache,http.cgi,http.cors,http.datadog,http.expires,http.filemanager,http.filter,http.forwardproxy,http.git,http.gopkg,http.grpc,http.hugo,http.ipfilter,http.jekyll,http.jwt,http.locale,http.login,http.mailout,http.minify,http.nobots,http.prometheus,http.proxyprotocol,http.ratelimit,http.realip,http.reauth,http.restic,http.upload,http.webdav,net
 RUN yum -y install openssh-client git && yum clean all
 RUN mkdir -p /etc/caddy && useradd -u 1001 -g 0 caddy
 RUN curl --silent --show-error --fail --location \
       --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://caddyserver.com/download/build?os=linux&arch=amd64&features=${plugins}" \
+      "https://caddyserver.com/download/linux/amd64?license=personal&plugins=${plugins}" \
     | tar --no-same-owner -C /usr/bin/ -xz caddy \
     && chmod 0755 /usr/bin/caddy \
     && /usr/bin/caddy -version
