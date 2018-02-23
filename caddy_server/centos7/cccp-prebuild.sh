@@ -10,7 +10,7 @@ CADDY_MAIN_BUILDS_REPO="github.com/caddyserver/builds";
 
 CADDY_SRC_BUILD_REMOTE_NAME="caddy_build"
 CADDY_SRC_BUILD_REMOTE_URL="https://github.com/mohammedzee1000/caddy"
-CADDY_SRC_BUILD_REMOTE_BRANCH="centos-release"
+CADDY_SRC_BUILD_REMOTE_BRANCH="centos_release"
 
 CADDY_PLUGIN_AUTH="github.com/casbin/caddy-authz";
 CADDY_PLUGIN_AWSES="github.com/miquella/caddy-awses";
@@ -20,8 +20,8 @@ CADDY_PLUGIN_PROMETHEUS="github.com/miekg/caddy-prometheus";
 
 if [ -d ${BUILD_DIR} ]; then
     rm -rf ${BUILD_DIR};
-    mkdir ${BUILD_DIR};
 fi
+mkdir ${BUILD_DIR};
 
 # GET INTO DIRECTORY AFTER RECORDING CURRENT PATH
 CURR="`pwd`"
@@ -56,9 +56,6 @@ pushd "src/${CADDY_MAIN_SRC_REPO}";
 git remote add ${CADDY_SRC_BUILD_REMOTE_NAME} ${CADDY_SRC_BUILD_REMOTE_URL};
 git fetch ${CADDY_SRC_BUILD_REMOTE_NAME};
 git checkout ${CADDY_SRC_BUILD_REMOTE_BRANCH};
-
-# - Run script to pull in deps for caddy plugins
-sh ./cccp-prep-deps.sh
 
 # CD INTO THE DIRECTORY CONTAINING SCRIPT TO PERFORM ACTUAL BUILD OF BINARY
 pushd "./caddy";
