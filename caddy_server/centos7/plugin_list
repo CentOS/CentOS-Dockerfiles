@@ -4,8 +4,6 @@ github.com/casbin/caddy-authz
 github.com/jung-kurt/caddy-cgi
 # http.cors
 github.com/captncraig/cors
-# http.login
-github.com/tarent/loginsrv
 # http.git
 github.com/abiosoft/caddy-git
 # http.datadog

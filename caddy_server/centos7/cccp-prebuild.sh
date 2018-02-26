@@ -3,6 +3,7 @@
 set -eux;
 
 BUILD_DIR="/opt/cccp/caddy-build";
+PLUGIN_LIST="plugin_list";
 
 CADDY_BIN="caddy"
 CADDY_MAIN_SRC_REPO="github.com/mholt/caddy";
@@ -12,19 +13,17 @@ CADDY_SRC_BUILD_REMOTE_NAME="caddy_build"
 CADDY_SRC_BUILD_REMOTE_URL="https://github.com/mohammedzee1000/caddy"
 CADDY_SRC_BUILD_REMOTE_BRANCH="centos_release"
 
-CADDY_PLUGIN_AUTH="github.com/casbin/caddy-authz";
-CADDY_PLUGIN_AWSES="github.com/miquella/caddy-awses";
-CADDY_PLUGIN_PROMETHEUS="github.com/miekg/caddy-prometheus";
-
 # CREATE/RE_CREATE BUILD DIR
 
 if [ -d ${BUILD_DIR} ]; then
     rm -rf ${BUILD_DIR};
 fi
-mkdir ${BUILD_DIR};
+mkdir -p ${BUILD_DIR};
 
-# GET INTO DIRECTORY AFTER RECORDING CURRENT PATH
+# GET INTO DIRECTORY AFTER RECORDING CURRENT PATH AND COPYING PLUGIN_FILE
+# to build dir
 CURR="`pwd`"
+cp -avrf "./${PLUGIN_LIST}" "${BUILD_DIR}/${PLUGIN_LIST}"
 pushd ${BUILD_DIR};
 
 # INSTALL GOLANG 1.9
@@ -47,9 +46,9 @@ go get ${CADDY_MAIN_SRC_REPO};
 go get ${CADDY_MAIN_BUILDS_REPO};
 
 # - Get plugin deps
-go get ${CADDY_PLUGIN_AUTH};
-go get ${CADDY_PLUGIN_AWSES};
-go get ${CADDY_PLUGIN_PROMETHEUS};
+for plugin in `grep -v "^#" ${PLUGIN_LIST}`; do
+    go get ${plugin}
+done
 
 # - GET INTO THE SRC REPO AND MOVE TO mohammedzee1000 fork of caddy, centos-release branch
 pushd "src/${CADDY_MAIN_SRC_REPO}";
