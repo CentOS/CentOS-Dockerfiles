@@ -7,19 +7,8 @@ This is a dockerfile for Caddy Server. Everything is loaded into `/var/www/html`
 By default, content present inside `/var/www/html` will be served over web on the port 2015. Ports 80, 443, 8080 and 8443 are also exposed. Mount your content here with appropriate permissions.
 
 ### Caddy server plugins installed by default:
- 
- 1. DNS
- 2. expire
- 3. git
- 4. minify
- 5. search
- 6. cloudfare
- 7. digitalocean
- 8. dyn
- 9. googlecloud
- 10. upload
- 11. jwt
- 12. filemanager
+
+List of installed plugins is available in 'plugin_list' file in same directory.
 
 ### Caddy Server Configuration
 
