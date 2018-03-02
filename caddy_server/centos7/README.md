@@ -8,7 +8,32 @@ By default, content present inside `/var/www/html` will be served over web on th
 
 ### Caddy server plugins installed by default:
 
-List of installed plugins is available in 'plugin_list' file in same directory.
+List of installed plugins is available in 'plugin_list' file in same directory. For reference : 
+
+#### http.login
+github.com/casbin/caddy-authz
+#### http.cgi
+github.com/jung-kurt/caddy-cgi
+#### http.cors
+github.com/captncraig/cors
+#### http.git
+github.com/abiosoft/caddy-git
+#### http.datadog
+github.com/payintech/caddy-datadog
+#### http.cache
+github.com/nicolasazrak/caddy-cache
+#### http.locale
+github.com/simia-tech/caddy-locale
+#### http.filter
+github.com/echocat/caddy-filter
+#### http.ratelimit
+github.com/xuqingfeng/caddy-rate-limit
+#### http.upload
+blitznote.com/src/caddy.upload
+#### http.awses
+github.com/miquella/caddy-awses
+#### http.prometheus
+github.com/miekg/caddy-prometheus
 
 ### Caddy Server Configuration
 

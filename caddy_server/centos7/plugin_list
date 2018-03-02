@@ -17,7 +17,7 @@ github.com/echocat/caddy-filter
 # http.ratelimit
 github.com/xuqingfeng/caddy-rate-limit
 # http.upload
-github.com/wmark/caddy.upload
+blitznote.com/src/caddy.upload
 # http.awses
 github.com/miquella/caddy-awses
 # http.prometheus
