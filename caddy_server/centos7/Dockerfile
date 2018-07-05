@@ -1,6 +1,6 @@
 FROM registry.centos.org/centos/centos:7
 LABEL maintainer="Mohammed Zeeshan Ahmed <moahmed@redhat.com>"
-LABEL VERSION="0.10.11" ARCHITECTURE="amd64"
+LABEL VERSION="0.11.0" ARCHITECTURE="amd64"
 RUN mkdir -p /etc/caddy && useradd -u 1001 -g 0 caddy
 ADD ./caddy /usr/bin/caddy
 RUN chmod 0755 /usr/bin/caddy \
