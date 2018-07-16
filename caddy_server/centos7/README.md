@@ -50,3 +50,9 @@ You can read more about how to create your own Caddyfile at the [caddyfile Synta
  
 **Note** :
 For docker volume mounts using -v, you might encounter issues with selinux permission denies. Please take [nesessary steps](http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/) to avoid any issues
+
+### How it is built?
+
+Well currently, due to licensing issues in pre-built caddy server binaries, and the need for plugins, i maintain a [fork](https://github.com/mohammedzee1000/caddy.git) of [Caddy Server codebase](https://github.com/mholt/caddy.git). 
+
+This container itself is setup using the source from the [centos_release branch](https://github.com/mohammedzee1000/caddy/tree/centos_release). I have also added the above listed plugins to the source code by editing the below (https://github.com/mohammedzee1000/caddy/blob/centos_release/caddy/caddymain/run.go#L39-L66) and rebuilding the source by using the [prebuild script](cccp-prebuild.sh).
