@@ -15,5 +15,5 @@ RUN yum -y install mongodb-enterprise-server; yum clean all
 RUN mkdir -p /data/db
 
 EXPOSE 27017
-#ENTRYPOINT ["/usr/bin/mongod"]
+ENTRYPOINT ["/usr/bin/mongod"]
 
