@@ -1,4 +1,3 @@
-[ec2-user@ip-172-29-64-27 ~]$ cat mongodb-enterprise.repo
 [mongodb-enterprise]
 name=MongoDB Enterprise Repository
 baseurl=https://repo.mongodb.com/yum/redhat/$releasever/mongodb-enterprise/4.0/$basearch/
