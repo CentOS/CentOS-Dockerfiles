@@ -30,7 +30,7 @@ RUN ${PGPATH}/bin/postgresql-setup initdb
 
 ADD ./postgresql.conf /var/lib/pgsql/data/postgresql.conf
 
-RUN chown -v postgres.postgres /var/lib/pgsql/data/postgresql.conf
+RUN chown -v postgres.postgres /var/lib/pgsql/9.5/data/postgresql.conf
 
 RUN echo "host    all             all             0.0.0.0/0               md5" >> /var/lib/pgsql/data/pg_hba.conf
 
