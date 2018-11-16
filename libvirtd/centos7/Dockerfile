@@ -1,7 +1,7 @@
 FROM centos/systemd
 
 RUN yum -y install libvirt-daemon-driver-* libvirt-daemon \
-  libvirt-daemon-kvm qemu-kvm && yum clean all; \
+  libvirt-daemon-kvm qemu-kvm && yum clean all
 RUN systemctl enable libvirtd; systemctl enable virtlockd
 
 RUN yum install -y openssh-server openssh-clients arpwatch
