@@ -35,3 +35,4 @@ EXPOSE 5900
 
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
+USER 1001
