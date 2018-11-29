@@ -1,5 +1,7 @@
 FROM centos/systemd
 
+USER 0
+
 RUN yum -y install libvirt-daemon-driver-* libvirt-daemon \
   libvirt-daemon-kvm qemu-kvm && yum clean all
 RUN systemctl enable libvirtd; systemctl enable virtlockd
@@ -35,4 +37,3 @@ EXPOSE 5900
 
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
-USER 0
