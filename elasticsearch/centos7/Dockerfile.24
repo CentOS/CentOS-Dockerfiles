@@ -1,0 +1,18 @@
+FROM registry.centos.org/centos/centos:7
+
+MAINTAINER Mohammed Zeeshan Ahmed<moahmed@redhat.com>
+
+RUN yum -y update && yum clean all
+
+ENV ELASTIC_MAJOR_VERSION="2.4.0"
+
+ADD fix-permissions.sh install_older_versions.sh run.sh passwd.template /opt/scripts/
+
+RUN . /opt/scripts/install_older_versions.sh
+
+USER elasticsearch
+
+EXPOSE 9200 9300
+
+ENTRYPOINT ["/opt/scripts/run.sh"]
+CMD ["elastic"]
