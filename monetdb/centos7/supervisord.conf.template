@@ -1,0 +1,13 @@
+[supervisord]
+nodaemon=true
+logfile=/tmp/supervisord.log
+
+[program:monetdbd]
+command=monetdbd start /var/monetdbdata/db/${DATABASE_NAME}
+autorestart=false
+redirect_stderr=true
+stdout_logfile=syslog
+stderr_logfile=syslog
+priority=1
+exitcodes=0
+startsecs=0
