@@ -12,6 +12,10 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+# Systemd defines that it expects SIGRTMIN+3 for graceful shutdown
+# https://www.commandlinux.com/man-page/man1/systemd.1.html#lbAH
+STOPSIGNAL SIGRTMIN+3
+
 VOLUME [ "/sys/fs/cgroup" ]
 
 CMD ["/usr/sbin/init"]
