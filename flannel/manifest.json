@@ -1,0 +1,10 @@
+{
+    "version": "1.0",
+    "defaultValues": {
+	"FLANNELD_ETCD_PREFIX": "/atomic.io/network",
+	"FLANNELD_ETCD_ENDPOINTS": "http://127.0.0.1:2379",
+	"AFTER": "etcd.service",
+	"REQUIRED_BY": "docker.service"
+    }
+}
+
