@@ -8,4 +8,4 @@ EXPOSE 5000
 USER 42
 
 ENTRYPOINT ["/usr/bin/registry"]
-CMD ["/etc/docker-distribution/registry/config.yml"]
+CMD ["serve", "/etc/docker-distribution/registry/config.yml"]
