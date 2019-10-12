@@ -1,6 +1,9 @@
 FROM centos/kubernetes-node
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
+LABEL Name="kubernetes-kubelet" \
+      Version="1.5.2-0.2"
+
 # NOTE: kubelet wants pidof (from sysvinit-tools), but it can't use it
 # properly in a container, so we skip installing it
 

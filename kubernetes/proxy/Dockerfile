@@ -1,6 +1,9 @@
 FROM centos/kubernetes-node
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
+LABEL Name="kubernetes-proxy" \
+      Version="1.5.2-0.2"
+
 RUN yum install -y iptables conntrack-tools && yum clean all
 
 LABEL RUN='/usr/bin/docker run -d --net=host --privileged ${OPT1} --name ${NAME} ${IMAGE} ${OPT3}'
