@@ -15,7 +15,7 @@ RUN yum -y update; yum clean all \
 # Add the xstartup file into the image
 ADD ./xstartup /
 
-RUN mkdir /.vnc
+RUN mkdir /.vnc \
     && x11vnc -storepasswd 123456 /.vnc/passwd \
     &&  \cp -f ./xstartup /.vnc/. \
     && chmod -v +x /.vnc/xstartup \
