@@ -11,7 +11,7 @@ First create a Dockerfile and setup the required service or services. Systemd ca
 ```
 FROM centos/systemd
 
-MAINTAINER "Your Name" <you@example.com>
+LABEL maintainer="Your Name <you@example.com>"
 
 RUN yum -y install httpd; yum clean all; systemctl enable httpd.service
 
