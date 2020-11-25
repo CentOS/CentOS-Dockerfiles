@@ -1,11 +1,10 @@
 # Use latest Fedora image as the base
 FROM centos:latest
-MAINTAINER http://www.centos.org
+MAINTAINER https://www.centos.org
 
 LABEL Vendor="CentOS"
 LABEL License=GPLv2
 LABEL Version=8.2.0.Final
-
 
 # Update base image
 RUN yum -y update && yum clean all
@@ -27,7 +26,7 @@ RUN groupadd -r wildfly -g 433 && useradd -u 431 -r -g wildfly -d /opt/wildfly -
 RUN mkdir /opt/wildfly-$WILDFLY_VERSION
 
 # Add the WildFly distribution to /opt, and make wildfly the owner of the extracted tar content
-RUN cd /opt && curl http://download.jboss.org/wildfly/$WILDFLY_VERSION/wildfly-$WILDFLY_VERSION.tar.gz | tar zx && chown -R wildfly:wildfly /opt/wildfly-$WILDFLY_VERSION
+RUN cd /opt && curl https://download.jboss.org/wildfly/$WILDFLY_VERSION/wildfly-$WILDFLY_VERSION.tar.gz | tar zx && chown -R wildfly:wildfly /opt/wildfly-$WILDFLY_VERSION
 
 # Make sure the distribution is available from a well-known place
 RUN ln -s /opt/wildfly-$WILDFLY_VERSION /opt/wildfly && chown -R wildfly:wildfly /opt/wildfly
