@@ -1,0 +1,7 @@
+/var/log/sshd.log {
+        missingok
+        postrotate
+                /bin/kill -HUP `cat /var/run/sshd.pid 2> /dev/null` 2> /dev/null || true
+        /etc/init.d/sshd 2> /dev/null > /dev/null || true
+        endscript
+}
